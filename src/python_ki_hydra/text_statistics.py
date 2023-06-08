@@ -38,7 +38,7 @@ def analyze_text(data: dict[str, Any]) -> Optional[dict[str, Any]]:
     )
 
     return {
-        "flesh-ease": score,
+        "flesch-ease": score,
         "classification": classification,
         "reading-time": reading_time * 60,
         "text": text,
