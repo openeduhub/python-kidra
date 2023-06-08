@@ -22,6 +22,8 @@
           with python-packages; [
             cherrypy
           ];
+        python-build = pkgs.python3.withPackages python-packages-build;
+
 
         python-packages-devel = python-packages:
           with python-packages; [
@@ -29,20 +31,16 @@
             pyflakes
             isort
             ipython
-            bootstrapped-pip
           ] ++ (python-packages-build python-packages);
-
-        python-build = pkgs.python3.withPackages python-packages-build;
         python-devel = pkgs.python3.withPackages python-packages-devel;
 
         # declare, how the python application shall be built
-        pythonBuild = with python-build.pkgs;
-          buildPythonApplication {
+        python_ki_hydra = python-build.pkgs.buildPythonApplication {
             pname = "python_ki_hydra";
             version = "1.0.0";
 
             propagatedBuildInputs =
-              (python-packages-devel python-build.pkgs)
+              (python-packages-build python-build.pkgs)
               ++ [text_statistics];
 
             src = ./.;
@@ -55,19 +53,19 @@
         };
 
         # declare, how the docker image shall be built
-        dockerImage = pkgs.dockerTools.buildImage {
-          name = pythonBuild.pname;
-          tag = pythonBuild.version;
+        docker-image = pkgs.dockerTools.buildImage {
+          name = python_ki_hydra.pname;
+          tag = python_ki_hydra.version;
 
           # unzip nltk-punkt and put it into a directory that nltk considers
           config = {
             Cmd = [
               "${pkgs.bash}/bin/sh"
               (pkgs.writeShellScript "runDocker.sh" ''
-            ${pkgs.coreutils}/bin/mkdir -p /nltk_data/tokenizers;
-            ${pkgs.unzip}/bin/unzip ${nltk-punkt} -d /nltk_data/tokenizers;
-            /bin/python_ki_hydra
-          '')
+                ${pkgs.coreutils}/bin/mkdir -p /nltk_data/tokenizers;
+                ${pkgs.unzip}/bin/unzip ${nltk-punkt} -d /nltk_data/tokenizers;
+                /bin/python_ki_hydra
+              '')
             ];
             WorkingDir = "/";
           };
@@ -75,13 +73,13 @@
           # copy the binary of the application into the image
           copyToRoot = pkgs.buildEnv {
             name = "image-root";
-            paths = [ pythonBuild ];
+            paths = [ python_ki_hydra ];
             pathsToLink = [ "/bin" ];
           };
         };
 
       in {
-        defaultPackage = dockerImage;
+        defaultPackage = docker-image;
         devShell = pkgs.mkShell {
           buildInputs = [
             text_statistics
