@@ -86,13 +86,14 @@ curl -d \
      -X POST \
      localhost:8080/analyze-text | json
 #+end_src
-#+RESULTS:
-: {
-:   "flesh-ease": 38.37922077922076,
-:   "classification": "Schwer",
-:   "reading-time": 52.66382947894089,
-:   "text": "Brauereigasthaus zum Bären (Ichenhausen)\nDas Brauereigasthaus zum Bären in Ichenhausen, einer Stadt im Landkreis Günzburg im bayerischen Regierungsbezirk Schwaben, wurde im 18. Jahrhundert errichtet. Das Gasthaus an der Heinrich-Sinz-Straße 33 ist ein geschütztes Baudenkmal.\nDer Bau mit Schweifgiebel und vier zu zehn Fensterachsen wurde 1823 erweitert. Die Putzornamentik der Fassade ist bereits abgegangen. Das Brauhaus auf dem gleichen Grundstück wurde 1999 abgebrochen, der Brauereigasthof selbst 2016. Das Grundstück ist heute mit drei Mehrfamilienhäusern bebaut.\nLiteratur[Bearbeiten | Quelltext bearbeiten]\n- Bernt von Hagen, Angelika Wegener-Hüssen: Landkreis Günzburg (= Bayerisches Landesamt für Denkmalpflege [Hrsg.]: Denkmäler in Bayern. Band VII.91/1). Karl M. Lipp Verlag, München 2004, ISBN 3-87490-589-6, S. 165."
-: }
+#+begin_src json
+{
+  "flesh-ease": 38.37922077922076,
+  "classification": "Schwer",
+  "reading-time": 52.66382947894089,
+  "text": "Brauereigasthaus zum Bären (Ichenhausen)\nDas Brauereigasthaus zum Bären in Ichenhausen, einer Stadt im Landkreis Günzburg im bayerischen Regierungsbezirk Schwaben, wurde im 18. Jahrhundert errichtet. Das Gasthaus an der Heinrich-Sinz-Straße 33 ist ein geschütztes Baudenkmal.\nDer Bau mit Schweifgiebel und vier zu zehn Fensterachsen wurde 1823 erweitert. Die Putzornamentik der Fassade ist bereits abgegangen. Das Brauhaus auf dem gleichen Grundstück wurde 1999 abgebrochen, der Brauereigasthof selbst 2016. Das Grundstück ist heute mit drei Mehrfamilienhäusern bebaut.\nLiteratur[Bearbeiten | Quelltext bearbeiten]\n- Bernt von Hagen, Angelika Wegener-Hüssen: Landkreis Günzburg (= Bayerisches Landesamt für Denkmalpflege [Hrsg.]: Denkmäler in Bayern. Band VII.91/1). Karl M. Lipp Verlag, München 2004, ISBN 3-87490-589-6, S. 165."
+}
+#+end_src
 
 #+begin_src sh :results verbatim
 curl -d \
@@ -102,10 +103,12 @@ curl -d \
      localhost:8080/analyze-text | json
 
 #+end_src
-#+RESULTS:
-: {
-:   "flesh-ease": 39.510869565217405,
-:   "classification": "Schwer",
-:   "reading-time": 29.43450094776071,
-:   "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-: }
+
+#+begin_src json
+{
+  "flesh-ease": 39.510869565217405,
+  "classification": "Schwer",
+  "reading-time": 29.43450094776071,
+  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+}
+#+end_src
