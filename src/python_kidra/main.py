@@ -1,5 +1,5 @@
 import cherrypy
-import python_ki_hydra.text_statistics as text_statistics
+import python_kidra.text_statistics as text_statistics
 
 
 class WebService:

@@ -1,5 +1,5 @@
 {
-  description = "Basic Python Environment";
+  description = "Dependency and Build Process for the python_kidra";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
@@ -35,8 +35,8 @@
         python-devel = pkgs.python3.withPackages python-packages-devel;
 
         # declare, how the python application shall be built
-        python_ki_hydra = python-build.pkgs.buildPythonApplication {
-            pname = "python_ki_hydra";
+        python_kidra = python-build.pkgs.buildPythonApplication {
+            pname = "python_kidra";
             version = "1.0.0";
 
             propagatedBuildInputs =
@@ -54,8 +54,8 @@
 
         # declare, how the docker image shall be built
         docker-image = pkgs.dockerTools.buildImage {
-          name = python_ki_hydra.pname;
-          tag = python_ki_hydra.version;
+          name = python_kidra.pname;
+          tag = python_kidra.version;
 
           # unzip nltk-punkt and put it into a directory that nltk considers
           config = {
@@ -64,7 +64,7 @@
               (pkgs.writeShellScript "runDocker.sh" ''
                 ${pkgs.coreutils}/bin/mkdir -p /nltk_data/tokenizers;
                 ${pkgs.unzip}/bin/unzip ${nltk-punkt} -d /nltk_data/tokenizers;
-                /bin/python_ki_hydra
+                /bin/python_kidra
               '')
             ];
             WorkingDir = "/";
@@ -73,7 +73,7 @@
           # copy the binary of the application into the image
           copyToRoot = pkgs.buildEnv {
             name = "image-root";
-            paths = [ python_ki_hydra ];
+            paths = [ python_kidra ];
             pathsToLink = [ "/bin" ];
           };
         };
