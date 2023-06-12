@@ -37,7 +37,7 @@
         # declare, how the python application shall be built
         python_kidra = python-build.pkgs.buildPythonApplication {
             pname = "python_kidra";
-            version = "1.0.0";
+            version = "1.0.1";
 
             propagatedBuildInputs =
               (python-packages-build python-build.pkgs)

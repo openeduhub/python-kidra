@@ -4,6 +4,10 @@ import python_kidra.text_statistics as text_statistics
 
 class WebService:
     @cherrypy.expose
+    def _ping(self):
+        pass
+
+    @cherrypy.expose
     @cherrypy.tools.json_in()
     @cherrypy.tools.json_out()
     def analyze_text(self):
