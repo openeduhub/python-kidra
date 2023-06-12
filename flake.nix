@@ -54,7 +54,7 @@
 
         # declare, how the docker image shall be built
         docker-image = pkgs.dockerTools.buildImage {
-          name = python_kidra.pname;
+          name = "python-kidra";
           tag = python_kidra.version;
 
           # unzip nltk-punkt and put it into a directory that nltk considers

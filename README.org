@@ -42,7 +42,7 @@ depending on how it was built.
 A message will appear to confirm that the image has been loaded, including its name and version.
 Now, start the service through
 #+begin_src sh
-docker run -p 8080:8080 localhost/python_ki_hydra:<version>
+docker run -p 8080:8080 localhost/python-kidra:<version>
 #+end_src
 
 * API
