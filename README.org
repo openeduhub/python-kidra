@@ -50,6 +50,22 @@ docker run -p 8080:8080 localhost/python_ki_hydra:<version>
 Each individual service available through this API is located on another sub-domain.
 The input data, and potential parameters, are passed as JSON objects.
 
+** Ping
+
+A simple GET request can be posted to the =_ping= sub-domain. This will return an empty message with status code 200 if the service is running.
+
+#+begin_src sh :results verbatim :exports both
+curl -i -H "Accept: application/json" -H "Content-Type: application/json" -X GET localhost:8080/_ping
+#+end_src
+
+#+RESULTS:
+: HTTP/1.1 200 OK
+: Content-Type: text/html;charset=utf-8
+: Server: CherryPy/18.8.0
+: Date: Mon, 12 Jun 2023 10:03:22 GMT
+: Content-Length: 0
+: 
+
 ** Text Statistics
 
 Various statistics on a given piece of text, or text from a URL, can be processed through the =analyze-text= sub-domain. For more information, see https://github.com/openeduhub/text-statistics.
