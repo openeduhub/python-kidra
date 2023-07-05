@@ -21,6 +21,7 @@
         python-packages-build = python-packages:
           with python-packages; [
             cherrypy
+            text_statistics
           ];
         python-build = pkgs.python3.withPackages python-packages-build;
 
@@ -40,8 +41,7 @@
             version = "1.0.1";
 
             propagatedBuildInputs =
-              (python-packages-build python-build.pkgs)
-              ++ [text_statistics];
+              (python-packages-build python-build.pkgs);
 
             src = ./.;
           };
