@@ -1,8 +1,8 @@
 #!/bin/sh 
 echo "sandbox = false" >> /etc/nix/nix.conf &&
     cd /python_kidra &&
-    nix build &&
-    mkdir results
-rm results/image
-cp $(readlink result) results/image
+    nix build --out-link result-link
+
 rm result
+cp $(readlink result-link) result
+rm result-link
