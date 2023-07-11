@@ -21,11 +21,11 @@ The image can also be built without a local nix installation. For this, another 
 Make sure to be inside of repository before running =build.sh=; it will not work otherwise.
 #+begin_src sh
 git clone https://github.com/openeduhub/python-kidra.git
-cd python_ki_hydra
+cd python-kidra
 sh build.sh
 #+end_src
 
-The image will be available as =results/image=.
+The image will be available as =result=.
 
 * Load & Run the Image
 
@@ -33,11 +33,6 @@ Now, load the created image through
 #+begin_src sh
 docker load < result
 #+end_src
-or
-#+begin_src sh
-docker load < results/image
-#+end_src
-depending on how it was built.
 
 A message will appear to confirm that the image has been loaded, including its name and version.
 Now, start the service through
