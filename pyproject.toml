@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "python_kidra"
+version = "1.0.3"
+description = "Unified Service for Python AI Services"
+authors = ["joopitz <jonas.opitz@live.de>"]
+readme = "README.org"
+packages = [{include = "python_kidra"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+CherryPy = "^18.8.0"
+text-statistics = {git = "https://github.com/openeduhub/text-statistics"}
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.7.0"
+isort = "^5.12.0"
+ipython = "^8.14.0"
+
+[tool.poetry.scripts]
+python-kidra = 'python_kidra:main'
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
