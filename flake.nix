@@ -1,35 +1,42 @@
 {
   description = "Build system & development environment for python-kidra";
 
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-  inputs.poetry2nix = {
-    url = "github:nix-community/poetry2nix";
-    inputs.nixpkgs.follows = "nixpkgs";
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    poetry2nix = {
+      url = "github:nix-community/poetry2nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { self, nixpkgs, flake-utils, poetry2nix }:
     let
-      l = nixpkgs.lib;
+      # only support the x86 architecture, running on linux
+      # TODO: also support MacOS
       system = "x86_64-linux";
 
-      # import nixpkgs and poetry2nix functions
+      # import nix packages, utilities, and poetry2nix functions
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
       };
-      inherit (poetry2nix.legacyPackages.${system}) mkPoetryApplication mkPoetryPackages mkPoetryEnv;
+      l = nixpkgs.lib;
+      inherit (poetry2nix.legacyPackages.${system}) mkPoetryApplication mkPoetryEnv;
 
-      # specify information about the package
+      # specify general information, such as the Python version we are using
       projectDir = self;
       python = pkgs.python310;
 
       # generate development environment
+      # for this, we can just rely on the pre-compiled sources, e.g. at PyPi
       poetry-env = mkPoetryEnv {
         inherit projectDir python;
         preferWheels = true;
         groups = [ "dev" ];
       };
-      
+
+      # build python application,
+      # compiling (almost) all individual packages to ensure reproducibility
       poetry-app = mkPoetryApplication {
         inherit projectDir python;
         preferWheels = false;
@@ -68,34 +75,6 @@
                 };
               })
           )));
-        # {
-        #   autocommand = super.autocommand.overridePythonAttrs (old: {
-        #     nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ self.setuptools ];
-        #   });
-        #   justext = super.justext.overridePythonAttrs (old: {
-        #     nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ self.setuptools ];
-        #   });
-        #   courlan = super.courlan.overridePythonAttrs (old: {
-        #     nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ self.setuptools ];
-        #   });
-        #   htmldate = super.htmldate.overridePythonAttrs (old: {
-        #     nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ self.setuptools ];
-        #   });
-        #   trafilatura = super.trafilatura.overridePythonAttrs (old: {
-        #     nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ self.setuptools ];
-        #   });
-        #   annotated-types = super.annotated-types.overridePythonAttrs (old: {
-        #     nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ self.hatchling ];
-        #   });
-        #   # do not rebuild pydantic or pydantic-core
-        #   pydantic-core = super.pydantic-core.override {
-        #     preferWheel = true;
-        #   };
-        #   pydantic = super.pydantic.override {
-        #     preferWheel = true;
-        #   };
-        # }
-        # );
       };
       
       # download nltk-punkt, an external requirement for nltk
@@ -108,7 +87,7 @@
       docker-image = pkgs.dockerTools.buildImage {
         name = poetry-app.pname;
         tag = poetry-app.version;
-        # unzip nltk-punkt and put it into a directory that nltk considers
+        # unzip nltk-punkt and put it into a directory that nltk searches
         config = {
           Cmd = [
             "${pkgs.bash}/bin/sh" (pkgs.writeShellScript "runDocker.sh" ''
@@ -136,9 +115,10 @@
         };
         devShells.${system}.default = pkgs.mkShell {
           buildInputs = [
+            poetry-env
+            # external packages
             pkgs.poetry
             pkgs.nodePackages.pyright
-            poetry-env
           ];
         };
       };
