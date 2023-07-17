@@ -8,8 +8,6 @@
       url = "github:nix-community/poetry2nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # nix lsp server
-    rnix-lsp.url = "github:nix-community/rnix-lsp";
   };
 
   outputs = { self, nixpkgs, flake-utils, poetry2nix, ... }:
