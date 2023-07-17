@@ -16,11 +16,7 @@
   (system:
   let
     # import nix packages, utilities, and poetry2nix functions
-    pkgs = import nixpkgs {
-      inherit system;
-      config.allowUnfree = true;
-    };
-    l = nixpkgs.lib;
+    pkgs = import nixpkgs { inherit system; };
     inherit (poetry2nix.legacyPackages.${system}) mkPoetryApplication mkPoetryEnv;
 
     # specify general information, such as the Python version we are using
@@ -29,7 +25,7 @@
 
     # generate development environment
     # for this, we can just rely on the pre-compiled sources, e.g. at PyPi
-    poetry-env = mkPoetryEnv {
+    python-env = mkPoetryEnv {
       inherit projectDir python;
       preferWheels = true;
       groups = [ "dev" ];
@@ -37,44 +33,17 @@
 
     # build python application,
     # compiling (almost) all individual packages to ensure reproducibility
-    poetry-app = mkPoetryApplication {
+    python-app = mkPoetryApplication {
       inherit projectDir python;
       preferWheels = false;
       groups = [ ];
-      # fix missing dependencies of external packages
-      # this is only required if we set preferWheels = false;
+      # fix missing dependencies of python packages
+      # this is only required because we set preferWheels = false,
+      # which causes installation from source for python packages
+      # rather than just pulling their binaries from PyPi or similar
       overrides = pkgs.poetry2nix.overrides.withDefaults (self: super:
-      (l.listToAttrs (
-        # packages that are missig setuptools
-        l.lists.forEach
-        ["autocommand" "justext" "courlan" "htmldate" "trafilatura"]
-        (x: {
-          name = x;
-          value = super."${x}".overridePythonAttrs (old: {
-            nativeBuildInputs = (old.nativeBuildInputs or []) ++ [self.setuptools];
-          });
-        })
-        ++
-        # packages that are missing hatchling
-        l.lists.forEach
-        ["annotated-types"]
-        (x: {
-          name = x;
-          value = super."${x}".overridePythonAttrs (old: {
-            nativeBuildInputs = (old.nativeBuildInputs or []) ++ [self.hatchling];
-          });
-        })
-        ++
-        # packages that should not be compiled manually
-        l.lists.forEach
-        ["pydantic" "pydantic-core"]
-        (x: {
-          name = x;
-          value = super."${x}".override {
-            preferWheel = true;
-          };
-        })
-      )));
+        import ./overrides.nix {inherit self super; lib=nixpkgs.lib;}
+      );
     };
 
     # download nltk-punkt, an external requirement for nltk
@@ -84,9 +53,9 @@
     };
 
     # declare, how the docker image shall be built
-    docker-image = pkgs.dockerTools.buildImage {
-      name = poetry-app.pname;
-      tag = poetry-app.version;
+    docker-img = pkgs.dockerTools.buildImage {
+      name = python-app.pname;
+      tag = python-app.version;
       # unzip nltk-punkt and put it into a directory that nltk searches
       config = {
         Cmd = [
@@ -101,7 +70,7 @@
       # copy the binary of the application into the image
       copyToRoot = pkgs.buildEnv {
         name = "image-root";
-        paths = [ poetry-app ];
+        paths = [ python-app ];
         pathsToLink = [ "/bin" ];
       };
     };
@@ -109,19 +78,16 @@
   in
   {
     packages = rec {
-      python-kidra = poetry-app;
-      docker = docker-image;
+      python-kidra = python-app;
+      docker = docker-img;
       default = docker;
     };
     devShells.default = pkgs.mkShell {
       buildInputs = [
-        poetry-env
-        # for interaction with poetry
-        pkgs.poetry
-        # python LSP server
-        pkgs.nodePackages.pyright
-        # nix LSP server
-        self.inputs.rnix-lsp.packages.${system}.rnix-lsp
+        python-env                # the python development environment itself
+        pkgs.poetry               # for interaction with poetry
+        pkgs.nodePackages.pyright # python LSP server
+        pkgs.rnix-lsp             # nix LSP server
       ];
     };
   }
