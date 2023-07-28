@@ -1,2 +1,2 @@
 cherrypy
-text_statistics
+requests
