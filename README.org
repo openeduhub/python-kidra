@@ -1,10 +1,17 @@
 #+title: A Unified API for IT's JOINTLY AI Services in Python
+#+EXPORT_EXCLUDE_TAGS: noexport
 
- This Python service serves as a unified API to the various AI applications we have built as part of the IT's JOINTLY project in order to generate additional or missing metadata.
+A unified API to the various AI applications we have built as part of the IT's JOINTLY project in order to generate additional or missing metadata.
+ 
+* Utils :noexport:
+#+name: format-json
+#+begin_src sh :var result="" :results verbatim
+echo $result | json
+#+end_src
 
-* Build Docker Image
+* Build OCI image
 
-The docker image can be built in one of two ways:
+An OCI-compliant image can be built in one of two ways:
 
 ** Using Nix
 
@@ -27,17 +34,26 @@ sh build.sh
 
 The image will be available as =result=.
 
-* Load & Run the Image
+- Note: in order to reduce the amount of redundant building in future build processes, a persistent build-container =kidra-builder= is created as part of the script. This container will contain a cache of all used artifacts of previous builds. While it is safe to remove it afterwards, this will cause a full re-build when running the script again.
+
+* Load & run the image
 
 Now, load the created image through
 #+begin_src sh
-docker load < result
+docker load -i result
 #+end_src
 
 A message will appear to confirm that the image has been loaded, including its name and version.
 Now, start the service through
 #+begin_src sh
 docker run -p 8080:8080 localhost/python-kidra:<version>
+#+end_src
+
+* Running as a stand-alone application
+
+This service can also be run and installed as a native ~Nix~ ~Flake~ application. In particular, the following command will run the service locally:
+#+begin_src sh
+nix run github:openeduhub/python-kidra/separate-packages
 #+end_src
 
 * API
@@ -52,20 +68,20 @@ A simple GET request can be posted to the =_ping= sub-domain. This will return a
 #+begin_src sh :results verbatim :exports both
 curl -i \
      -X GET \
-     localhost:8080/_ping
+     localhost:8080/_ping/
 #+end_src
 
 #+RESULTS:
 : HTTP/1.1 200 OK
 : Content-Type: text/html;charset=utf-8
 : Server: CherryPy/18.8.0
-: Date: Mon, 12 Jun 2023 12:07:32 GMT
+: Date: Fri, 28 Jul 2023 12:54:44 GMT
 : Content-Length: 0
 : 
 
 ** Text Statistics
 
-Various statistics on a given piece of text, or text from a URL, can be processed through the =analyze-text= sub-domain. For more information, see https://github.com/openeduhub/text-statistics.
+Various statistics on a given piece of text, or text from a URL, can be processed through the =text-statistics= sub-domain. For more information, see https://github.com/openeduhub/text-statistics.
 
 The processed JSON fields are
 - =text: str=
@@ -90,38 +106,36 @@ Otherwise, a JSON object with the following fields is returned:
 - =text: str=
   The text that was analyzed.
 
+*** Examples
 
-Example:
-#+begin_src sh :results verbatim :exports both :wrap src json
+#+begin_src sh :results verbatim :exports both :post format-json(result=*this*) :wrap src json
 curl -d '{"url": "https://de.wikipedia.org/wiki/Brauereigasthaus_zum_Bären_(Ichenhausen%29"}' \
      -H "Content-Type: application/json" \
      -X POST \
-     localhost:8080/analyze-text \
-    | json # for formatting of the results
+     localhost:8080/text-statistics/
 #+end_src
 
 #+RESULTS:
 #+begin_src json
 {
-  "flesch-ease": 38.37922077922076,
+  "flesh-ease": 38.37922077922076,
   "classification": "Schwer",
   "reading-time": 52.66382947894089,
   "text": "Brauereigasthaus zum Bären (Ichenhausen)\nDas Brauereigasthaus zum Bären in Ichenhausen, einer Stadt im Landkreis Günzburg im bayerischen Regierungsbezirk Schwaben, wurde im 18. Jahrhundert errichtet. Das Gasthaus an der Heinrich-Sinz-Straße 33 ist ein geschütztes Baudenkmal.\nDer Bau mit Schweifgiebel und vier zu zehn Fensterachsen wurde 1823 erweitert. Die Putzornamentik der Fassade ist bereits abgegangen. Das Brauhaus auf dem gleichen Grundstück wurde 1999 abgebrochen, der Brauereigasthof selbst 2016. Das Grundstück ist heute mit drei Mehrfamilienhäusern bebaut.\nLiteratur[Bearbeiten | Quelltext bearbeiten]\n- Bernt von Hagen, Angelika Wegener-Hüssen: Landkreis Günzburg (= Bayerisches Landesamt für Denkmalpflege [Hrsg.]: Denkmäler in Bayern. Band VII.91/1). Karl M. Lipp Verlag, München 2004, ISBN 3-87490-589-6, S. 165."
 }
 #+end_src
 
-#+begin_src sh :results verbatim :exports both :wrap src json
+#+begin_src sh :results verbatim :exports both :post format-json(result=*this*) :wrap src json
 curl -d '{"text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."}' \
      -H "Content-Type: application/json" \
      -X POST \
-     localhost:8080/analyze-text \
-    | json # for formatting of the results
+     localhost:8080/text-statistics/
 #+end_src
 
 #+RESULTS:
 #+begin_src json
 {
-  "flesch-ease": 39.510869565217405,
+  "flesh-ease": 39.510869565217405,
   "classification": "Schwer",
   "reading-time": 29.43450094776071,
   "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
