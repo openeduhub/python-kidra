@@ -9,11 +9,11 @@ A unified API to the various AI applications we have built as part of the IT's J
 echo $result | json
 #+end_src
 
-* Build OCI image
+* Build & run OCI image
 
 An OCI-compliant image can be built in one of two ways:
 
-** Using Nix
+** Build using Nix
 
 Ensure that nix is installed with flakes support. Then, simply run
 #+begin_src sh
@@ -22,9 +22,9 @@ nix build github:openeduhub/python-kidra
 
 The image will be available as =result= in the current directory.
 
-** Using Docker
+** Build using Docker
 
-The image can also be built without a local nix installation. For this, another docker image, containing a nix installation with flakes support, will be used.
+The image can also be built without a local nix installation through bootstrapping. For this, another docker image, containing a nix installation with flakes support, will be used.
 Make sure to be inside of repository before running =build.sh=; it will not work otherwise.
 #+begin_src sh
 git clone https://github.com/openeduhub/python-kidra.git
@@ -36,7 +36,7 @@ The image will be available as =result=.
 
 - Note: in order to reduce the amount of redundant building in future build processes, a persistent build-container =kidra-builder= is created as part of the script. This container will contain a cache of all used artifacts of previous builds. While it is safe to remove it afterwards, this will cause a full re-build when running the script again.
 
-* Load & run the image
+** Load & run the image
 
 Now, load the created image through
 #+begin_src sh
@@ -46,10 +46,10 @@ docker load -i result
 A message will appear to confirm that the image has been loaded, including its name and version.
 Now, start the service through
 #+begin_src sh
-docker run -p 8080:8080 localhost/python-kidra:<version>
+docker run -p 8080:8080 python-kidra:<version>
 #+end_src
 
-* Running as a stand-alone application
+* Running as a native application
 
 This service can also be run and installed as a native ~Nix~ ~Flake~ application. In particular, the following command will run the service locally:
 #+begin_src sh
@@ -60,6 +60,23 @@ nix run github:openeduhub/python-kidra/separate-packages
 
 Each individual service available through this API is located on another sub-domain.
 The input data, and potential parameters, are passed as JSON objects.
+
+- *Important*: the specified sub-domain must be followed with a forward-slash (=/=)!
+  If omitted, you will get a =301 Moved Permanently= error:
+  #+begin_src sh :results verbatim :exports both
+  curl -i -X GET \
+       localhost:8080/text-statistics
+  #+end_src
+
+  #+RESULTS:
+  : HTTP/1.1 301 Moved Permanently
+  : Content-Type: text/html;charset=utf-8
+  : Server: CherryPy/18.8.0
+  : Date: Fri, 28 Jul 2023 13:20:50 GMT
+  : Location: http://localhost:8080/text-statistics/
+  : Content-Length: 131
+  : 
+  : This resource has permanently moved to <a href="http://localhost:8080/text-statistics/">http://localhost:8080/text-statistics/</a>.
 
 ** Ping
 
@@ -75,7 +92,7 @@ curl -i \
 : HTTP/1.1 200 OK
 : Content-Type: text/html;charset=utf-8
 : Server: CherryPy/18.8.0
-: Date: Fri, 28 Jul 2023 12:54:44 GMT
+: Date: Fri, 28 Jul 2023 13:16:14 GMT
 : Content-Length: 0
 : 
 
