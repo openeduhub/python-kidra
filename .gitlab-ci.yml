@@ -1,0 +1,9 @@
+build:
+  image:
+    name: "nixpkgs/nix-flakes:nixos-23.05"
+  script:
+    - nix build .\#docker --out-link result-link
+    - cp -f $(readlink result-link) python-kidra_oci-image.tar.gz
+  artifacts:
+    paths:
+      - python-kidra_oci-image.tar.gz
