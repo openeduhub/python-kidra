@@ -36,34 +36,49 @@
         "type": "github"
       }
     },
+    "nix-filter": {
+      "locked": {
+        "lastModified": 1687178632,
+        "narHash": "sha256-HS7YR5erss0JCaUijPeyg2XrisEb959FIct3n2TMGbE=",
+        "owner": "numtide",
+        "repo": "nix-filter",
+        "rev": "d90c75e8319d0dd9be67d933d8eb9d0894ec9174",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "nix-filter",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1690441914,
-        "narHash": "sha256-Ac+kJQ5z9MDAMyzSc0i0zJDx2i3qi9NjlW5Lz285G/I=",
+        "lastModified": 1690835256,
+        "narHash": "sha256-SZy/Nvwbf6CorhEsvmjqgjoYNLnRfaKVZMfSnpUDPnc=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "db8672b8d0a2593c2405aed0c1dfa64b2a2f428f",
+        "rev": "b7cde1c47b7316f6138a2b36ef6627f3d16d645c",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
-        "ref": "nixpkgs-unstable",
+        "ref": "nixos-23.05",
         "repo": "nixpkgs",
         "type": "github"
       }
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1690351598,
-        "narHash": "sha256-ahBsCRti0gX+X2qACvtZfNxjVSGf3QAe9tAb+nKJ+pM=",
-        "owner": "joopitz",
+        "lastModified": 1690835256,
+        "narHash": "sha256-SZy/Nvwbf6CorhEsvmjqgjoYNLnRfaKVZMfSnpUDPnc=",
+        "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "caa920ded84629c79ea7289d307a584a2df1d594",
+        "rev": "b7cde1c47b7316f6138a2b36ef6627f3d16d645c",
         "type": "github"
       },
       "original": {
-        "owner": "joopitz",
-        "ref": "trafilatura",
+        "owner": "nixos",
+        "ref": "nixos-23.05",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -71,6 +86,7 @@
     "root": {
       "inputs": {
         "flake-utils": "flake-utils",
+        "nix-filter": "nix-filter",
         "nixpkgs": "nixpkgs",
         "text-statistics": "text-statistics"
       }
@@ -111,11 +127,11 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1690548417,
-        "narHash": "sha256-naxE+Cy/dueqE1WZ6EXnmSu/lbmtjOYd5EfdbzhxOuQ=",
+        "lastModified": 1690967804,
+        "narHash": "sha256-D3z3qr9qL4P8OIc2xPi345iOwZJfcW26QSdWA0oLgYs=",
         "owner": "openeduhub",
         "repo": "text-statistics",
-        "rev": "0242c513e302c2baf38caa5f9d9f1c7c45a5688d",
+        "rev": "0e5ac5afd57cb7ba5ffea7b45404786763d3e07f",
         "type": "github"
       },
       "original": {
