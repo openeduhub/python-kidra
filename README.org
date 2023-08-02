@@ -17,7 +17,7 @@ An OCI-compliant image can be built in one of two ways:
 
 Ensure that nix is installed with flakes support. Then, simply run
 #+begin_src sh
-nix build github:openeduhub/python-kidra
+nix build github:openeduhub/python-kidra#docker
 #+end_src
 
 The image will be available as =result= in the current directory.
