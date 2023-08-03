@@ -19,7 +19,10 @@ class Service:
     port: str  #: Port the service is listening to (must be unique)
     post_subdomain: Optional[str] = None  #: Sub-domain for POST requests
     ping_subdomain: str = "_ping"  #: Sub-domain for pinging the service
-    boot_timeout: float = 15  #: Time in seconds to wait for service to boot
+    boot_timeout: Optional[
+        float
+    ] = 15  #: Time in seconds to wait for service to boot. Infinite if None
+    autostart: bool = True  #: Whether to automatically start this service
 
     @property
     def api_address(self) -> str:
@@ -53,7 +56,10 @@ def start_subservice(service: Service) -> None:
     success = False
     start_time = time.time()
     while not success:
-        if time.time() - start_time > service.boot_timeout:
+        if (
+            service.boot_timeout is not None
+            and time.time() - start_time > service.boot_timeout
+        ):
             raise TimeoutError(
                 f"{service.name} took more than the allowed {service.boot_timeout} seconds to become reachable"
             )
@@ -82,7 +88,9 @@ class KidraService:
         """Create the kidra with given services, automatically starting them"""
         self.post_request_funs = dict()
         for service in services:
-            start_subservice(service)
+            if service.autostart:
+                start_subservice(service)
+
             self.post_request_funs[service.name] = get_post_request_fun(service)
 
     def _cp_dispatch(self, vpath: list[str]):
