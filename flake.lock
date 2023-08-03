@@ -107,11 +107,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1691054935,
-        "narHash": "sha256-BeysXyYasgrO1wxAc5X8gXGjb+Y8eB+iTt+BvDKWOyo=",
+        "lastModified": 1691056639,
+        "narHash": "sha256-+OzMiZ57AjXDxGD+clEBEwgvo1rbiAoxIPLFQOwX8Mc=",
         "owner": "joopitz",
         "repo": "wlo-topic-assistant",
-        "rev": "c3deb005aa0885decf32bf95f8837a47e4942357",
+        "rev": "d00830ae32ad7cc6d05e530b1de29a3b6fa16354",
         "type": "github"
       },
       "original": {

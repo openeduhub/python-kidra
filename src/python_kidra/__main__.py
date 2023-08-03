@@ -10,6 +10,23 @@ SERVICES: set[Service] = {
         port="19867",
         post_subdomain="analyze-text",
     ),
+    Service(
+        name="topic-assistant-keywords",
+        binary="wlo-topic-assistant",
+        host="localhost",
+        port="19868",
+        post_subdomain="topics",
+        autostart=True,
+        boot_timeout=None,
+    ),
+    Service(
+        name="topic-assistant-embeddings",
+        binary="",
+        host="localhost",
+        port="19868",
+        post_subdomain="topics2",
+        autostart=False,
+    ),
 }
 
 
