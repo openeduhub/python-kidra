@@ -16,7 +16,9 @@ class Service:
     name: str  #: Sub-domain to assign the service in the kidra to
     binary: str  #: Executable to use to start the service
     host: str  #: Host domain of the service (usually localhost)
-    port: str  #: Port the service is listening to (must be unique)
+    port: Optional[
+        str
+    ] = None  #: Port the service is listening to (must be unique if autostarting)
     post_subdomain: Optional[str] = None  #: Sub-domain for POST requests
     ping_subdomain: str = "_ping"  #: Sub-domain for pinging the service
     boot_timeout: Optional[
@@ -29,14 +31,14 @@ class Service:
         """Full address for POST requests"""
         if self.port is not None:
             return f"http://{self.host}:{self.port}/{self.post_subdomain}"
-        return f"http://{self.host}/{self.post_subdomain}"
+        return f"https://{self.host}/{self.post_subdomain}"
 
     @property
     def ping_address(self) -> str:
         """Full address for ping"""
         if self.port is not None:
             return f"http://{self.host}:{self.port}/{self.ping_subdomain}"
-        return f"http://{self.host}/{self.ping_subdomain}"
+        return f"https://{self.host}/{self.ping_subdomain}"
 
 
 def start_subservice(service: Service) -> None:

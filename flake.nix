@@ -67,7 +67,7 @@
         ### declare how the python application shall be built
         python-kidra = python.pkgs.buildPythonApplication rec {
           pname = "python-kidra";
-          version = "1.1.1";
+          version = "1.1.2";
           src = nix-filter {
             root = self;
             include = [
@@ -92,7 +92,7 @@
         };
 
         ### declare how the docker image shall be built
-        docker-img = pkgs.dockerTools.buildImage {
+        docker-img = pkgs.dockerTools.buildLayeredImage {
           name = python-kidra.pname;
           tag = python-kidra.version;
           config = {
