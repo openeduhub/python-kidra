@@ -1,0 +1,9 @@
+build:
+  image:
+    name: "nixpkgs/nix-flakes:nixos-23.05"
+  script:
+    - nix build ".#docker"
+    - nix profile install "nixpkgs#skopeo"
+    - skopeo login $DOCKER_REGISTRY -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+    - mkdir tmp
+    - skopeo copy --insecure-policy --tmpdir tmp docker-archive:./result docker://$DOCKER_REGISTRY/projects/wlo/python-kidra:$CI_COMMIT_REF_SLUG
