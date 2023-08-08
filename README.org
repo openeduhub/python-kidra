@@ -96,9 +96,11 @@ curl -i \
 : Content-Length: 0
 : 
 
-** Text Statistics
+** Text statistics
 
-Various statistics on a given piece of text, or text from a URL, can be processed through the =text-statistics= sub-domain. For more information, see https://github.com/openeduhub/text-statistics.
+Accessible through the =text-statistics/= sub-domain.
+
+Various statistics on a given piece of text, or text from a URL. For more information, see https://github.com/openeduhub/text-statistics.
 
 The processed JSON fields are
 - =text: str=
@@ -110,8 +112,9 @@ The processed JSON fields are
 - =reading_speed: float=
   The base reading speed (in words per minute) to use for the calculation of the reading time.
   Optional, with a default value of 200.0.
-
+  
 If =text= and =url= were not given, or no text could be fetched from the given URL, =null= is returned.
+
 Otherwise, a JSON object with the following fields is returned:
 - =classification: str=
   A classification of the readability, based on the Flesh readability score.
@@ -122,6 +125,8 @@ Otherwise, a JSON object with the following fields is returned:
   The calculated reading time, in seconds.
 - =text: str=
   The text that was analyzed.
+- =version: str=
+  The version of the sub-service
 
 *** Examples
 
@@ -158,3 +163,730 @@ curl -d '{"text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed 
   "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 }
 #+end_src
+
+** Disciplines prediction
+
+Accessible through the =disciplines/= sub-domain.
+
+Predict the discipline that relates to the given text, following the [[https://vocabs.openeduhub.de/w3id.org/openeduhub/vocabs/discipline/index.html][SkoHub vocabulary]]. For more information, see [[https://github.com/yovisto/wlo-classification]].
+
+The processed JSON fields are
+- =text: str=
+  The text to be analyzed.
+
+If the analysis was successful, a JSON object with the following fields is returned:
+- =disciplines: list[tuple[str, float]]=
+  A list of disciplines, represented as their ID according to the [[https://vocabs.openeduhub.de/w3id.org/openeduhub/vocabs/discipline/index.html][SkoHub vocabulary]], together with the confidence of the prediction.
+- =version: str= 
+  The version of the sub-service
+
+*** Examples
+
+#+begin_src sh :results verbatim :exports both :post format-json(result=*this*) :wrap src json
+curl -d \
+     '{"text" : "Der Satz des Pythagoras lautet: a^2 + b^2 = c^2."}' \
+     -H "Content-Type: application/json" \
+     -X POST \
+     http://0.0.0.0:8080/disciplines/
+#+end_src
+#+RESULTS:
+#+begin_src json
+{
+  "disciplines": [
+    [
+      "380",
+      0.9223824143409729
+    ]
+  ],
+  "version": "0.1.0"
+}
+#+end_src
+
+** Topic assistant
+
+Accessible through the =topic-assistant-keywords/= and =topic-assistant-embeddings/= sub-domains.
+
+Predict the topics that relates to the given text, following the [[https://vocabs.openeduhub.de/w3id.org/openeduhub/vocabs/oeh-topics/5e40e372-735c-4b17-bbf7-e827a5702b57.html][SkoHub vocabulary]]. For more information, see [[https://github.com/yovisto/wlo-topic-assistant]].
+
+The processed JSON fields are
+- =text: str=
+  The text to be analyzed.
+
+If the analysis was successful, a JSON object with the following fields is returned:
+- =WLO=
+  A sub-tree of the topics hierarchy. Each leaf-node =data= contains is represented as a dictionary with fields:
+  - =w: float= the weight of the prediction (higher is better)
+  - =uri: str= the URI of the topic
+  - =label: str= the label of the topic
+- =version: str= 
+  The version of the sub-service
+
+*** Examples
+
+**** Using Keywords
+
+#+begin_src sh :results verbatim :exports both :post format-json(result=*this*) :wrap src json
+curl -d \
+     '{"text" : "Im Englisch Unterricht behandeln wir heute Verben, Past Perfect und False Friends"}' \
+     -H "Content-Type: application/json" \
+     -X POST \
+     http://0.0.0.0:8080/topic-assistant-keywords/
+#+end_src
+
+#+RESULTS:
+#+begin_src json
+{
+  "WLO": {
+    "children": [
+      {
+        "Deutsch als Zweitsprache (7)": {
+          "children": [
+            {
+              "Wortschatz (1)": {
+                "children": [
+                  {
+                    "Schule und Studium (1) [englisch]": {
+                      "data": {
+                        "w": 1,
+                        "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/2a17539e-0803-4801-a318-a5a9eb31af92",
+                        "label": "Schule und Studium",
+                        "match": "englisch"
+                      }
+                    }
+                  }
+                ],
+                "data": {
+                  "w": 1,
+                  "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/19febd4c-c96c-4a08-9fcc-00cb626f8e49",
+                  "label": "Wortschatz"
+                }
+              }
+            },
+            {
+              "Grammatik (6) [verben]": {
+                "children": [
+                  {
+                    "Verben (4) [verben]": {
+                      "children": [
+                        {
+                          "transitive und intransitive Verben (1) [verben]": {
+                            "data": {
+                              "w": 1,
+                              "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/5514ade4-1379-4661-8f7c-7e5c9da0c2c9",
+                              "label": "transitive und intransitive Verben",
+                              "match": "verben"
+                            }
+                          }
+                        },
+                        {
+                          "Verben mit Ergänzungen (1) [verben]": {
+                            "data": {
+                              "w": 1,
+                              "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/b71a382f-6327-4d2b-8bc5-e1b03ad18ae8",
+                              "label": "Verben mit Ergänzungen",
+                              "match": "verben"
+                            }
+                          }
+                        },
+                        {
+                          "Imperativ (1) [verben]": {
+                            "data": {
+                              "w": 1,
+                              "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/1178cc9f-d507-4347-8c52-3bcdaf787721",
+                              "label": "Imperativ",
+                              "match": "verben"
+                            }
+                          }
+                        }
+                      ],
+                      "data": {
+                        "w": 4,
+                        "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/91641a45-b2c7-4651-9d8c-9197aafa3abd",
+                        "label": "Verben",
+                        "match": "verben"
+                      }
+                    }
+                  },
+                  {
+                    "Adverbien (1)": {
+                      "children": [
+                        {
+                          "Temporaladverbien (1) [heute]": {
+                            "data": {
+                              "w": 1,
+                              "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/535666aa-66a7-46e3-94ae-3998e4966f4f",
+                              "label": "Temporaladverbien",
+                              "match": "heute"
+                            }
+                          }
+                        }
+                      ],
+                      "data": {
+                        "w": 1,
+                        "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/b7bca233-dca9-44a2-8a4c-6236659f8926",
+                        "label": "Adverbien"
+                      }
+                    }
+                  }
+                ],
+                "data": {
+                  "w": 6,
+                  "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/12c4cd99-9804-44b5-a81b-e9900a0e3d42",
+                  "label": "Grammatik",
+                  "match": "verben"
+                }
+              }
+            }
+          ],
+          "data": {
+            "w": 7,
+            "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/26a336bf-51c8-4b91-9a6c-f1cf67fd4ae4",
+            "label": "Deutsch als Zweitsprache"
+          }
+        }
+      },
+      {
+        "Englisch (5) [englisch]": {
+          "children": [
+            {
+              "Sprache und Aussprache (2)": {
+                "children": [
+                  {
+                    "Wortbildung (1) [englisch]": {
+                      "data": {
+                        "w": 1,
+                        "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/4208a41e-0b56-4292-9511-9b610a899eb6",
+                        "label": "Wortbildung",
+                        "match": "englisch"
+                      }
+                    }
+                  },
+                  {
+                    "False friends (1) [false friends]": {
+                      "data": {
+                        "w": 1,
+                        "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/81c68535-80eb-403c-a3ca-1fe729ddbdda",
+                        "label": "False friends",
+                        "match": "false friends"
+                      }
+                    }
+                  }
+                ],
+                "data": {
+                  "w": 2,
+                  "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/24d1a2cc-3c05-4be8-bfab-987f1bc2c879",
+                  "label": "Sprache und Aussprache"
+                }
+              }
+            },
+            {
+              "Grammatik (2)": {
+                "children": [
+                  {
+                    "Verben (2) [verben]": {
+                      "children": [
+                        {
+                          "Past (1) [past]": {
+                            "data": {
+                              "w": 1,
+                              "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/104e7650-3096-4956-86d3-74e41e760bbf",
+                              "label": "Past",
+                              "match": "past"
+                            }
+                          }
+                        }
+                      ],
+                      "data": {
+                        "w": 2,
+                        "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/8fc42326-ba5b-4dd2-a676-472a22e362e0",
+                        "label": "Verben",
+                        "match": "verben"
+                      }
+                    }
+                  }
+                ],
+                "data": {
+                  "w": 2,
+                  "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/4c9faf4e-33b9-4599-9a36-1618c954e3d3",
+                  "label": "Grammatik"
+                }
+              }
+            }
+          ],
+          "data": {
+            "w": 5,
+            "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/15dbd166-fd31-4e01-aabd-524cfa4d2783",
+            "label": "Englisch",
+            "match": "englisch"
+          }
+        }
+      },
+      {
+        "Deutsch (2)": {
+          "children": [
+            {
+              "Grammatik und Sprache untersuchen (2)": {
+                "children": [
+                  {
+                    "Wortarten (2) [verben]": {
+                      "children": [
+                        {
+                          "Verben (1) [verben]": {
+                            "data": {
+                              "w": 1,
+                              "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/ccc981bf-85e2-41f5-b8fb-e7cca9958e2e",
+                              "label": "Verben",
+                              "match": "verben"
+                            }
+                          }
+                        }
+                      ],
+                      "data": {
+                        "w": 2,
+                        "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/6a03cfed-26f8-4936-8ca1-5ef36a81e795",
+                        "label": "Wortarten",
+                        "match": "verben"
+                      }
+                    }
+                  }
+                ],
+                "data": {
+                  "w": 2,
+                  "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/cffaadfb-5c07-4e9c-919c-0a53b862c89b",
+                  "label": "Grammatik und Sprache untersuchen"
+                }
+              }
+            }
+          ],
+          "data": {
+            "w": 2,
+            "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/69f9ff64-93da-4d68-b849-ebdf9fbdcc77",
+            "label": "Deutsch"
+          }
+        }
+      },
+      {
+        "Spanisch (1)": {
+          "children": [
+            {
+              "Grammatik (1)": {
+                "children": [
+                  {
+                    "Verben (1) [verben]": {
+                      "data": {
+                        "w": 1,
+                        "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/0ec7a5c0-3c06-489d-a3d3-66fa139c2d2e",
+                        "label": "Verben",
+                        "match": "verben"
+                      }
+                    }
+                  }
+                ],
+                "data": {
+                  "w": 1,
+                  "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/992f0da8-20a3-4fdf-85f1-bfd828dad744",
+                  "label": "Grammatik"
+                }
+              }
+            }
+          ],
+          "data": {
+            "w": 1,
+            "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/11bdb8a0-a9f5-4028-becc-cbf8e328dd4b",
+            "label": "Spanisch"
+          }
+        }
+      },
+      {
+        "Türkisch (1)": {
+          "children": [
+            {
+              "Grammatik (1)": {
+                "children": [
+                  {
+                    "Verben (1) [verben]": {
+                      "data": {
+                        "w": 1,
+                        "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/86b09fdf-f638-496a-8089-c3e2f7a42930",
+                        "label": "Verben",
+                        "match": "verben"
+                      }
+                    }
+                  }
+                ],
+                "data": {
+                  "w": 1,
+                  "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/0d4c206e-1198-4ad5-87dc-9f0637ef7e9f",
+                  "label": "Grammatik"
+                }
+              }
+            }
+          ],
+          "data": {
+            "w": 1,
+            "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/26105802-9039-4add-bf21-07a0f89f6e70",
+            "label": "Türkisch"
+          }
+        }
+      },
+      {
+        "Chemie (1)": {
+          "children": [
+            {
+              "Fachdidaktik (1)": {
+                "children": [
+                  {
+                    "Spiele und Spektakuläres (1) [unterricht]": {
+                      "data": {
+                        "w": 1,
+                        "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/277cdde9-112b-46fc-9e16-292e1146bc17",
+                        "label": "Spiele und Spektakuläres",
+                        "match": "unterricht"
+                      }
+                    }
+                  }
+                ],
+                "data": {
+                  "w": 1,
+                  "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/6a5c3d6a-b633-458b-b0b7-fdbccdfe7dec",
+                  "label": "Fachdidaktik"
+                }
+              }
+            }
+          ],
+          "data": {
+            "w": 1,
+            "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/4940d5da-9b21-4ec0-8824-d16e0409e629",
+            "label": "Chemie"
+          }
+        }
+      },
+      {
+        "Französisch (1)": {
+          "children": [
+            {
+              "Grammatik (1)": {
+                "children": [
+                  {
+                    "Verben (1) [verben]": {
+                      "data": {
+                        "w": 1,
+                        "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/5560a33a-e514-404f-be8a-bb5b3bee0235",
+                        "label": "Verben",
+                        "match": "verben"
+                      }
+                    }
+                  }
+                ],
+                "data": {
+                  "w": 1,
+                  "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/edc58d82-27e3-4814-9b4a-ab5c1cf7c66f",
+                  "label": "Grammatik"
+                }
+              }
+            }
+          ],
+          "data": {
+            "w": 1,
+            "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/86b990ef-0955-45ad-bdae-ec2623cf0e1a",
+            "label": "Französisch"
+          }
+        }
+      }
+    ],
+    "data": {
+      "w": 18,
+      "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/5e40e372-735c-4b17-bbf7-e827a5702b57"
+    }
+  },
+  "version": "0.1.2"
+}
+#+end_src
+
+
+**** Using Word-Embeddings
+
+#+begin_src sh :results verbatim :exports both :post format-json(result=*this*) :wrap src json
+curl -d \
+     '{"text" : "Im Englisch Unterricht behandeln wir heute Verben, Past Perfect und False Friends"}' \
+     -H "Content-Type: application/json" \
+     -X POST \
+     http://0.0.0.0:8080/topic-assistant-embeddings/
+#+end_src
+#+RESULTS:
+#+begin_src json
+{
+  "WLO": {
+    "children": [
+      {
+        "Englisch (4.29)": {
+          "children": [
+            {
+              "Themen und Wortschatz (2.51)": {
+                "children": [
+                  {
+                    "soziale Beziehungen (1.25)": {
+                      "children": [
+                        {
+                          "Liebe und Partnerschaft (0.43)": {
+                            "data": {
+                              "w": 0.4268239438533783,
+                              "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/16546297-790c-4ae7-b07d-7ae8688c7059",
+                              "label": "Liebe und Partnerschaft"
+                            }
+                          }
+                        },
+                        {
+                          "Konflikte (0.40)": {
+                            "data": {
+                              "w": 0.4044644832611084,
+                              "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/802a3b19-2092-4266-9700-464d0b78103b",
+                              "label": "Konflikte"
+                            }
+                          }
+                        },
+                        {
+                          "Freundschaften (0.42)": {
+                            "data": {
+                              "w": 0.4234519600868225,
+                              "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/c408cbf9-c630-4713-8efb-75ed8eede481",
+                              "label": "Freundschaften"
+                            }
+                          }
+                        }
+                      ],
+                      "data": {
+                        "w": 1.2547403872013092,
+                        "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/5e9006fd-a5ba-4b2d-a4de-d4b7897212e7",
+                        "label": "soziale Beziehungen"
+                      }
+                    }
+                  },
+                  {
+                    "Das bin ich (0.85)": {
+                      "children": [
+                        {
+                          "Herkunft (0.41)": {
+                            "data": {
+                              "w": 0.41091257333755493,
+                              "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/1e5b3742-19de-4b82-a36d-6d8eb89d62f8",
+                              "label": "Herkunft"
+                            }
+                          }
+                        },
+                        {
+                          "Gefühle (0.44)": {
+                            "data": {
+                              "w": 0.4370552897453308,
+                              "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/90d1e651-4208-4b7a-8507-bcdb2f23926e",
+                              "label": "Gefühle"
+                            }
+                          }
+                        }
+                      ],
+                      "data": {
+                        "w": 0.8479678630828857,
+                        "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/40a39fba-aaa5-4472-a5d4-ab2181d44367",
+                        "label": "Das bin ich"
+                      }
+                    }
+                  },
+                  {
+                    "Alltag (0.41)": {
+                      "children": [
+                        {
+                          "Reisen und Verkehrsmittel (0.41)": {
+                            "data": {
+                              "w": 0.4122765064239502,
+                              "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/2744742b-2ba9-4787-8e4f-1b013386c04e",
+                              "label": "Reisen und Verkehrsmittel"
+                            }
+                          }
+                        }
+                      ],
+                      "data": {
+                        "w": 0.4122765064239502,
+                        "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/b0266720-79f7-4921-8eb7-c42adbb46de9",
+                        "label": "Alltag"
+                      }
+                    }
+                  }
+                ],
+                "data": {
+                  "w": 2.514984756708145,
+                  "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/350a0734-a52d-4d1e-9249-5e19f216da2f",
+                  "label": "Themen und Wortschatz"
+                }
+              }
+            },
+            {
+              "Grammatik (1.77)": {
+                "children": [
+                  {
+                    "Verben (1.77)": {
+                      "children": [
+                        {
+                          "unregelmäßige Verben (0.41)": {
+                            "data": {
+                              "w": 0.41005003452301025,
+                              "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/5709e139-6ebe-4f52-82c0-319cd6d1aa40",
+                              "label": "unregelmäßige Verben"
+                            }
+                          }
+                        },
+                        {
+                          "Present Perfect (0.48)": {
+                            "data": {
+                              "w": 0.4804028570652008,
+                              "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/b95d437d-ea48-460b-b470-26db00517e4a",
+                              "label": "Present Perfect"
+                            }
+                          }
+                        },
+                        {
+                          "Past (0.44)": {
+                            "data": {
+                              "w": 0.4413597583770752,
+                              "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/104e7650-3096-4956-86d3-74e41e760bbf",
+                              "label": "Past"
+                            }
+                          }
+                        },
+                        {
+                          "Partizipialkonstruktionen (0.44)": {
+                            "data": {
+                              "w": 0.4409000873565674,
+                              "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/d6253314-e756-4278-b5b4-1e85b210a68b",
+                              "label": "Partizipialkonstruktionen"
+                            }
+                          }
+                        }
+                      ],
+                      "data": {
+                        "w": 1.7727127373218536,
+                        "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/8fc42326-ba5b-4dd2-a676-472a22e362e0",
+                        "label": "Verben"
+                      }
+                    }
+                  }
+                ],
+                "data": {
+                  "w": 1.7727127373218536,
+                  "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/4c9faf4e-33b9-4599-9a36-1618c954e3d3",
+                  "label": "Grammatik"
+                }
+              }
+            }
+          ],
+          "data": {
+            "w": 4.287697494029999,
+            "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/15dbd166-fd31-4e01-aabd-524cfa4d2783",
+            "label": "Englisch"
+          }
+        }
+      }
+    ],
+    "data": {
+      "w": 4.287697494029999,
+      "uri": "http://w3id.org/openeduhub/vocabs/oeh-topics/5e40e372-735c-4b17-bbf7-e827a5702b57"
+    }
+  },
+  "version": "0.1.2"
+}
+#+end_src
+
+** Wikipedia categories
+
+Accessible through the =link-wikipedia/= sub-domain.
+
+Predict the and link Wikipedia entities in the given text. For more details, see [[https://github.com/yovisto/kea-el]].
+
+The processed JSON fields are
+- =text: str=
+  The text to be analyzed.
+
+If the analysis was successful, a JSON object with the following fields is returned:
+- =text: str=
+  A modified version of the given text with added hyperlinks to the Wikipedia pages
+- =entities: list[entity]= 
+  The Wikipedia articles that were linked to the text. An entity contains the following fields:
+  - =entity: str= :: The name of the entity
+  - =start: int= :: The number of the start character in the text at which this entity was found
+  - =end: int= :: The number of the end character in the text at which this entity was found
+  - =score: float= :: The confidence of the link
+  - =categories: str= :: The Wikipedia categories of this entity
+- =version: str=
+  The version of the sub-service
+
+*** Examples
+
+#+begin_src sh :results verbatim :exports both :post format-json(result=*this*) :wrap src json
+curl -d \
+     '{"text" : "Der Satz des Pythagoras lautet: a^2 + b^2 = c^2."}' \
+     -H "Content-Type: application/json" \
+     -X POST \
+     http://0.0.0.0:8080/link-wikipedia/
+#+end_src
+#+RESULTS:
+#+begin_src json
+{
+  "text": "Der <a href='https://de.wikipedia.org/wiki/Satz_des_Pythagoras'>Satz des Pythagoras</a> lautet: <a href='https://de.wikipedia.org/wiki/Aftokinitodromos_2'>a^2</a> + b^2 = c^2.",
+  "entities": [
+    {
+      "entity": "Aftokinitodromos_2",
+      "start": 32,
+      "end": 35,
+      "score": 0.49563953488372087,
+      "categories": [
+        "Kategorie:Abkürzung",
+        "Kategorie:!Hauptkategorie",
+        "Kategorie:Autobahn_in_Griechenland",
+        "Kategorie:Autobahn",
+        "Kategorie:Fernstraße_in_Griechenland",
+        "Kategorie:Straße_in_Griechenland",
+        "Kategorie:Europastraße_90",
+        "Kategorie:Europastraße_nach_Nummer",
+        "Kategorie:Straße_in_Europa",
+        "Kategorie:Straße_in_Afrika",
+        "Kategorie:Straße_in_Asien",
+        "Kategorie:Straße_in_Australien_und_Ozeanien",
+        "Kategorie:Straße_in_Nordamerika",
+        "Kategorie:Straße_in_Südamerika",
+        "Kategorie:Straße_nach_Kontinent",
+        "Kategorie:Straße_nach_Staat",
+        "Kategorie:Verkehrsbauwerk_in_Europa",
+        "Kategorie:Verkehr_(Ostmakedonien_und_Thrakien)",
+        "Kategorie:Ostmakedonien_und_Thrakien",
+        "Kategorie:Sport_(Griechenland)_nach_Region",
+        "Kategorie:Verkehr_(Griechenland)_nach_Region",
+        "Kategorie:Verkehr_(Region_Epirus)",
+        "Kategorie:Epirus_(griechische_Region)",
+        "Kategorie:Verkehr_(Griechenland)_nach_Region",
+        "Kategorie:Verkehr_(Westmakedonien)",
+        "Kategorie:Verkehr_(Griechenland)_nach_Region",
+        "Kategorie:Westmakedonien",
+        "Kategorie:Verkehr_(Zentralmakedonien)",
+        "Kategorie:Verkehr_(Griechenland)_nach_Region",
+        "Kategorie:Zentralmakedonien"
+      ]
+    },
+    {
+      "entity": "Satz_des_Pythagoras",
+      "start": 4,
+      "end": 23,
+      "score": 0.4880952380952381,
+      "categories": [
+        "Kategorie:Dreiecksgeometrie",
+        "Kategorie:Ebene_Geometrie",
+        "Kategorie:Trigonometrie",
+        "Kategorie:Satz_(Ebene_Geometrie)",
+        "Kategorie:Ebene_Geometrie",
+        "Kategorie:Satz_(Geometrie)"
+      ]
+    }
+  ],
+  "essentialCategories": [],
+  "version": "0.1.0"
+}
+#+end_src
+
