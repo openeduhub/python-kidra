@@ -49,12 +49,29 @@
         "type": "github"
       }
     },
+    "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1691006197,
+        "narHash": "sha256-DbtxVWPt+ZP5W0Usg7jAyTomIM//c3Jtfa59Ht7AV8s=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "66aedfd010204949cb225cf749be08cb13ce1813",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "flake-utils": "flake-utils",
         "nix-filter": "nix-filter",
         "nixpkgs": "nixpkgs",
         "text-statistics": "text-statistics",
+        "wlo-classification": "wlo-classification",
         "wlo-topic-assistant": "wlo-topic-assistant"
       }
     },
@@ -93,6 +110,28 @@
       "original": {
         "owner": "openeduhub",
         "repo": "text-statistics",
+        "type": "github"
+      }
+    },
+    "wlo-classification": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": "nixpkgs_2"
+      },
+      "locked": {
+        "lastModified": 1691496980,
+        "narHash": "sha256-P0ycy4hb7ZF5Fyh/sWGggzHZkj4kFMp7NacOz28hbIY=",
+        "owner": "joopitz",
+        "repo": "wlo-classification",
+        "rev": "d89340667e386c6e2d1f1beaf887f8301c84b332",
+        "type": "github"
+      },
+      "original": {
+        "owner": "joopitz",
+        "ref": "nix",
+        "repo": "wlo-classification",
         "type": "github"
       }
     },

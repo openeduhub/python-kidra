@@ -31,6 +31,13 @@
         flake-utils.follows = "flake-utils";
       };
     };
+    wlo-classification = {
+      url = "github:joopitz/wlo-classification/nix";
+      # see comment above
+      inputs = {
+        flake-utils.follows = "flake-utils";
+      };
+    };
   };
 
   outputs = { self, nixpkgs, flake-utils, ... }:
@@ -42,6 +49,7 @@
           overlays = [
             self.inputs.text-statistics.overlays.default
             self.inputs.wlo-topic-assistant.overlays.default
+            self.inputs.wlo-classification.overlays.default
           ];
         };
         # an alias for the python version we are using
@@ -88,6 +96,7 @@
           makeWrapperArgs = [
             "--prefix PATH : ${pkgs.lib.makeBinPath [pkgs.text-statistics]}"
             "--prefix PATH : ${pkgs.lib.makeBinPath [pkgs.wlo-topic-assistant]}"
+            "--prefix PATH : ${pkgs.lib.makeBinPath [pkgs.wlo-classification]}"
           ];
         };
 
