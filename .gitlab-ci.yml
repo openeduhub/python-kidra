@@ -1,4 +1,5 @@
-build:
+Build and push Docker image:
+  stage: build
   image:
     name: "nixpkgs/nix-flakes:nixos-23.05"
   script:
