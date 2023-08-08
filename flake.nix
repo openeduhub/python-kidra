@@ -8,7 +8,7 @@
     nix-filter.url = "github:numtide/nix-filter";
     # sub-services
     text-statistics = {
-      url = "github:openeduhub/text-statistics/native-application";
+      url = "github:openeduhub/text-statistics";
       inputs = {
         /*
         override inputs to follow ours.
