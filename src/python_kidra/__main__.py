@@ -52,7 +52,7 @@ SERVICES: dict[str, Service] = {
         autostart=False,  # already started above
     ),
     "dbpedia": Service(
-        name="extract-categories",
+        name="link-wikipedia",
         binary="",
         host="wlo.yovisto.com/services",
         port=None,
