@@ -106,6 +106,9 @@
           tag = python-kidra.version;
           config = {
             Cmd = [ "${python-kidra}/bin/python-kidra" ];
+            ExposedPorts = {
+              "8080/tcp" = {};
+            };
           };
         };
 
