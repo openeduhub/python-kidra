@@ -1,7 +1,17 @@
+import argparse
 from collections.abc import Iterator
-import cherrypy
+from functools import partial
+
 import requests
-from python_kidra.webservice import Service, KidraService
+import uvicorn
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+
+from python_kidra.webservice import Service, generate_sub_services, custom_openapi
+from python_kidra._version import __version__
+
+
+app = FastAPI()
 
 
 class Ports:
@@ -51,29 +61,44 @@ SERVICES: dict[str, Service] = {
         post_subdomain="topics2",
         autostart=False,  # already started above
     ),
-    "dbpedia": Service(
+}
+
+
+def main():
+    # define CLI arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--port", action="store", default=8080, help="Port to listen on", type=int
+    )
+    parser.add_argument(
+        "--host", action="store", default="0.0.0.0", help="Hosts to listen to", type=str
+    )
+    parser.add_argument(
+        "--version",
+        action="version",
+        version="%(prog)s {version}".format(version=__version__),
+    )
+
+    # read passed CLI arguments
+    args = parser.parse_args()
+
+    # add all of the defined services
+    generate_sub_services(app, SERVICES.values())
+
+    # manually add the wikipedia linking service
+    dbpedia_service = Service(
         name="link-wikipedia",
         binary="",
         host="wlo.yovisto.com/services",
         port=None,
         post_subdomain="extract",
         autostart=False,  # not directly integrated in the kidra
-    ),
-}
+    )
 
-
-def main():
-    # listen to requests from any incoming IP address
-    cherrypy.server.socket_host = "0.0.0.0"
-    webservice = KidraService(SERVICES.values())
-
-    # override post function for extract-categories,
-    # because it expects a string, not a JSON object
-    service = SERVICES["dbpedia"]
-
+    @app.post(f"/{dbpedia_service.name}")
     def fun(data: dict) -> dict:
         result = requests.post(
-            service.api_address,
+            dbpedia_service.post_address,
             # encode as UTF-8 to prevent umlauts etc. causing issues
             data=data["text"].encode("utf-8"),
         ).json()
@@ -82,10 +107,21 @@ def main():
         result["version"] = "0.1.0"
         return result
 
-    webservice.post_request_funs["extract-categories"] = fun
+    # add a ping function
+    @app.get("/_ping")
+    def _ping():
+        pass
+
+    # override the openapi by merging the ones of the sub-services
+    app.openapi = partial(custom_openapi, app=app, services=SERVICES.values())
 
     # start the web service
-    cherrypy.quickstart(webservice)
+    uvicorn.run(
+        app,
+        host=args.host,
+        port=args.port,
+        reload=False,
+    )
 
 
 if __name__ == "__main__":

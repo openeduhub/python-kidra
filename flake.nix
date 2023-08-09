@@ -59,7 +59,9 @@
 
         ### declare the python packages used for building & developing
         python-packages-build = python-packages:
-          with python-packages; [ cherrypy
+          with python-packages; [ fastapi
+                                  pydantic
+                                  uvicorn
                                   requests
                                 ];
         
@@ -110,6 +112,12 @@
               "8080/tcp" = {};
             };
           };
+          contents = [ python-kidra
+                       pkgs.text-statistics
+                       pkgs.wlo-topic-assistant
+                       pkgs.wlo-classification
+                     ];
+          maxLayers = 120;
         };
 
       in {
