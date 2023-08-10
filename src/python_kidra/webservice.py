@@ -29,7 +29,7 @@ class Service:
     )
     boot_timeout: Optional[
         float
-    ] = 15  #: Time in seconds to wait for service to boot. Infinite if None
+    ] = 600  #: Time in seconds to wait for service to boot. Infinite if None
     autostart: bool = True  #: Whether to automatically start this service
 
     @property
@@ -81,10 +81,12 @@ def start_subservice(service: Service) -> None:
 
         try:
             r = requests.get(service.ping_address)
+            success = r.status_code == 200
+            if not success:
+                time.sleep(1)
+
         except requests.exceptions.ConnectionError:
             time.sleep(1)
-        else:
-            success = r.status_code == 200
 
     print("DONE")
 
