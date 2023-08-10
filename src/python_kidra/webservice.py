@@ -155,21 +155,23 @@ def custom_openapi(app, services: Iterable[Service]):
         ]
 
         # merge in data structures
-        openapi_schema["components"]["schemas"][service.name] = service_openapi_schema[
-            "components"
-        ]["schemas"]
+        schemas = openapi_schema["components"]["schemas"]
+        service_schemas = service_openapi_schema["components"]["schemas"]
+        for key, value in service_schemas.items():
+            schemas[f"{service.name}-{key}"] = value
 
-        # rename referenced data structures
-        for keys, value in __dictionary_leaves(openapi_schema):
+        # rename referenced data structures in the service's path
+        path = openapi_schema["paths"][f"/{service.name}"]
+        for keys, value in __dictionary_leaves(path):
             if type(value) is not str:
                 continue
 
             if "components/schemas" in value:
                 __apply_nested(
-                    openapi_schema,
+                    path,
                     keys,
                     lambda x: x.replace(
-                        "components/schemas/", f"components/schemas/{service.name}/"
+                        "components/schemas/", f"components/schemas/{service.name}-"
                     ),
                 )
 
