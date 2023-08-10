@@ -128,7 +128,7 @@
         };
         devShells.default = pkgs.mkShell {
           buildInputs = [
-            (python-packages-devel python.pkgs)
+            (python.withPackages python-packages-devel)
             # python language server
             pkgs.nodePackages.pyright
           ];
