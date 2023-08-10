@@ -11,7 +11,7 @@ from python_kidra.webservice import Service, generate_sub_services, custom_opena
 from python_kidra._version import __version__
 
 
-app = FastAPI()
+app = FastAPI(openapi_url="/v3/api-docs")
 
 
 class Ports:
