@@ -106,7 +106,7 @@
         };
 
         ### declare how the docker image shall be built
-        docker-img = pkgs.dockerTools.buildLayeredImage {
+        docker-spec = {
           name = python-kidra.pname;
           tag = python-kidra.version;
           config = {
@@ -122,10 +122,12 @@
                      ];
           maxLayers = 120;
         };
+        docker-img = pkgs.dockerTools.buildImage docker-spec;
+        docker-stream = pkgs.dockerTools.streamLayeredImage docker-spec;
 
       in {
         packages = rec {
-          inherit python-kidra;
+          inherit python-kidra docker-stream;
           docker = docker-img;
           default = python-kidra;
         };
