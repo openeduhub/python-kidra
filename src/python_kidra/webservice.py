@@ -156,26 +156,37 @@ def custom_openapi(app, services: Iterable[Service]):
             f"/{service.post_subdomain}"
         ]
 
+        service_prefix = service.name + "-"
+
         # merge in data structures
         schemas = openapi_schema["components"]["schemas"]
         service_schemas = service_openapi_schema["components"]["schemas"]
         for key, value in service_schemas.items():
-            schemas[f"{service.name}-{key}"] = value
+            schemas[service_prefix + key] = value
+
+        def rename_leaves(path: dict):
+            for keys, value in __dictionary_leaves(path):
+                if type(value) is not str:
+                    continue
+
+                if "components/schemas" in value:
+                    __apply_nested(
+                        path,
+                        keys,
+                        lambda x: x.replace(
+                            "components/schemas/",
+                            "components/schemas/" + service_prefix,
+                        ),
+                    )
 
         # rename referenced data structures in the service's path
-        path = openapi_schema["paths"][f"/{service.name}"]
-        for keys, value in __dictionary_leaves(path):
-            if type(value) is not str:
-                continue
+        rename_leaves(openapi_schema["paths"][f"/{service.name}"])
 
-            if "components/schemas" in value:
-                __apply_nested(
-                    path,
-                    keys,
-                    lambda x: x.replace(
-                        "components/schemas/", f"components/schemas/{service.name}-"
-                    ),
-                )
+        # rename referenced data structures in the service's component schemas
+        components = openapi_schema["components"]["schemas"]
+        for component_key, component_spec in components.items():
+            if service_prefix in component_key:
+                rename_leaves(component_spec)
 
     app.openapi_schema = openapi_schema
 
