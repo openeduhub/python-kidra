@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     # utilities
     flake-utils.url = "github:numtide/flake-utils";
     nix-filter.url = "github:numtide/nix-filter";
@@ -40,7 +41,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, flake-utils, ... }:
+  outputs = { self, nixpkgs, nixpkgs-unstable, flake-utils, ... }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs {
@@ -52,6 +53,8 @@
             self.inputs.wlo-classification.overlays.default
           ];
         };
+        # swagger-cli is only available in nixpkgs unstable
+        pkgs-unstable = import nixpkgs-unstable {inherit system;};
         # an alias for the python version we are using
         python = pkgs.python310;
         # utility to easily filter out unnecessary files from the source
@@ -131,6 +134,8 @@
             (python.withPackages python-packages-devel)
             # python language server
             pkgs.nodePackages.pyright
+            # cli tool to validate OpenAPI schemas
+            pkgs-unstable.swagger-cli
           ];
         };
       }
