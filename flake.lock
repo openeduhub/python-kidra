@@ -50,16 +50,32 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1691421349,
-        "narHash": "sha256-RRJyX0CUrs4uW4gMhd/X4rcDG8PTgaaCQM5rXEJOx6g=",
+        "lastModified": 1691592289,
+        "narHash": "sha256-Lqpw7lrXlLkYra33tp57ms8tZ0StWhbcl80vk4D90F8=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "011567f35433879aae5024fc6ec53f2a0568a6c4",
+        "rev": "9034b46dc4c7596a87ab837bb8a07ef2d887e8c7",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
         "ref": "nixos-23.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs-unstable": {
+      "locked": {
+        "lastModified": 1691654369,
+        "narHash": "sha256-gSILTEx1jRaJjwZxRlnu3ZwMn1FVNk80qlwiCX8kmpo=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "ce5e4a6ef2e59d89a971bc434ca8ca222b9c7f5e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -85,6 +101,7 @@
         "flake-utils": "flake-utils",
         "nix-filter": "nix-filter",
         "nixpkgs": "nixpkgs",
+        "nixpkgs-unstable": "nixpkgs-unstable",
         "text-statistics": "text-statistics",
         "wlo-classification": "wlo-classification",
         "wlo-topic-assistant": "wlo-topic-assistant"
@@ -136,11 +153,11 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1691589182,
-        "narHash": "sha256-xquyZ/RB5ng1iY/k0C/SCuUHMQZmGoGvU5+5q0PHr14=",
+        "lastModified": 1691745898,
+        "narHash": "sha256-gBYRx+ooDPLkC3iUe4Krsw1XW93KIkK8wOz+tRiNhGo=",
         "owner": "joopitz",
         "repo": "wlo-classification",
-        "rev": "4a63716522c46cd4d95608e1cab1f024b06ed705",
+        "rev": "8d8aca24b7d63dd920ef1009ce7bbe971a36c3f0",
         "type": "github"
       },
       "original": {
