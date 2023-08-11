@@ -3,7 +3,8 @@ Build and push Docker image:
   image:
     name: "nixpkgs/nix-flakes:nixos-23.05"
   script:
+    - nix build ".#docker-stream"
     - nix profile install "nixpkgs#skopeo" "nixpkgs#gzip"
     - skopeo login $DOCKER_REGISTRY -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
     - mkdir tmp
-    - $(nix build ".#docker-stream") | gzip --fast | skopeo copy --insecure-policy --tmpdir tmp docker-archive:/dev/stdin docker://$DOCKER_REGISTRY/projects/wlo/python-kidra:$CI_COMMIT_REF_SLUG
+    - ./result | gzip --fast | skopeo copy --insecure-policy --tmpdir tmp docker-archive:/dev/stdin docker://$DOCKER_REGISTRY/projects/wlo/python-kidra:$CI_COMMIT_REF_SLUG
