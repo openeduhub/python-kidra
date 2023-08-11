@@ -49,7 +49,7 @@ SERVICES: dict[str, Service] = {
         binary="wlo-topic-assistant",
         host="localhost",
         port=next(ports),
-        post_subdomain="topics",
+        post_subdomain="topics_flat",
         autostart=True,
         boot_timeout=None,
     ),
@@ -58,7 +58,7 @@ SERVICES: dict[str, Service] = {
         binary="",
         host="localhost",
         port=ports.current,
-        post_subdomain="topics2",
+        post_subdomain="topics2_flat",
         autostart=False,  # already started above
     ),
 }
