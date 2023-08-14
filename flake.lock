@@ -96,12 +96,39 @@
         "type": "github"
       }
     },
+    "openapi-checks": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "nixpkgs-unstable": [
+          "nixpkgs-unstable"
+        ]
+      },
+      "locked": {
+        "lastModified": 1692023274,
+        "narHash": "sha256-PiL/koPiJ4qa/6fsWjP9scS8CQdBTL9BMzNTJFUQ0pk=",
+        "ref": "refs/heads/main",
+        "rev": "47dfb71557761242cd8b269d4953087f3a617d1a",
+        "revCount": 3,
+        "type": "git",
+        "url": "https://codeberg.org/joka/nix-openapi-checks"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://codeberg.org/joka/nix-openapi-checks"
+      }
+    },
     "root": {
       "inputs": {
         "flake-utils": "flake-utils",
         "nix-filter": "nix-filter",
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable",
+        "openapi-checks": "openapi-checks",
         "text-statistics": "text-statistics",
         "wlo-classification": "wlo-classification",
         "wlo-topic-assistant": "wlo-topic-assistant"

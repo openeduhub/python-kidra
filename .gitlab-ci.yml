@@ -3,6 +3,7 @@ Build and push Docker image:
   image:
     name: "nixpkgs/nix-flakes:nixos-23.05"
   script:
+    - nix flake check
     - nix build ".#docker-stream"
     - nix profile install "nixpkgs#skopeo" "nixpkgs#gzip"
     - skopeo login $DOCKER_REGISTRY -u $DOCKER_USERNAME -p $DOCKER_PASSWORD

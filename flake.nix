@@ -7,6 +7,14 @@
     # utilities
     flake-utils.url = "github:numtide/flake-utils";
     nix-filter.url = "github:numtide/nix-filter";
+    openapi-checks = {
+      url = "git+https://codeberg.org/joka/nix-openapi-checks";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        nixpkgs-unstable.follows = "nixpkgs-unstable";
+        flake-utils.follows = "flake-utils";
+      };
+    };
     # sub-services
     text-statistics = {
       url = "github:openeduhub/text-statistics";
@@ -59,6 +67,7 @@
         python = pkgs.python310;
         # utility to easily filter out unnecessary files from the source
         nix-filter = self.inputs.nix-filter.lib;
+        openapi-checks = self.inputs.openapi-checks.lib.${system};
 
         ### declare the python packages used for building & developing
         python-packages-build = python-packages:
@@ -122,7 +131,7 @@
                      ];
           maxLayers = 120;
         };
-        docker-img = pkgs.dockerTools.buildImage docker-spec;
+        docker-img = pkgs.dockerTools.buildLayeredImage docker-spec;
         docker-stream = pkgs.dockerTools.streamLayeredImage docker-spec;
 
       in {
@@ -139,6 +148,13 @@
             # cli tool to validate OpenAPI schemas
             pkgs-unstable.swagger-cli
           ];
+        };
+        checks = {
+          openapi-check = openapi-checks.openapi-valid {
+            serviceBin = "${self.packages.${system}.python-kidra}/bin/python-kidra";
+            openapiDomain = "v3/api-docs";
+            memorySize = 6144;
+          };
         };
       }
     );
