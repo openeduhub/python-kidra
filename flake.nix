@@ -42,8 +42,15 @@
     };
     wlo-classification = {
       url = "github:joopitz/wlo-classification/nix";
+      inputs = {
+        flake-utils.follows = "flake-utils";
+      };
+    };
+    text-extraction = {
+      url = "github:openeduhub/text-extraction";
       # see comment above
       inputs = {
+        nixpkgs.follows = "nixpkgs";
         flake-utils.follows = "flake-utils";
       };
     };
@@ -57,6 +64,7 @@
           # add overlays of the sub-services
           overlays = [
             self.inputs.text-statistics.overlays.default
+            self.inputs.text-extraction.overlays.default
             self.inputs.wlo-topic-assistant.overlays.default
             self.inputs.wlo-classification.overlays.default
           ];
@@ -89,7 +97,7 @@
         ### declare how the python application shall be built
         python-kidra = python.pkgs.buildPythonApplication rec {
           pname = "python-kidra";
-          version = "1.1.2";
+          version = "1.1.3";
           src = nix-filter {
             root = self;
             include = [
@@ -109,6 +117,7 @@
           */
           makeWrapperArgs = [
             "--prefix PATH : ${pkgs.lib.makeBinPath [pkgs.text-statistics]}"
+            "--prefix PATH : ${pkgs.lib.makeBinPath [pkgs.text-extraction]}"
             "--prefix PATH : ${pkgs.lib.makeBinPath [pkgs.wlo-topic-assistant]}"
             "--prefix PATH : ${pkgs.lib.makeBinPath [pkgs.wlo-classification]}"
           ];
@@ -124,11 +133,6 @@
               "8080/tcp" = {};
             };
           };
-          contents = [ python-kidra
-                       pkgs.text-statistics
-                       pkgs.wlo-topic-assistant
-                       pkgs.wlo-classification
-                     ];
           maxLayers = 120;
         };
         docker-img = pkgs.dockerTools.buildLayeredImage docker-spec;

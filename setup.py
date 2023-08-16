@@ -11,5 +11,5 @@ setup(
         d for d in open("requirements.txt").readlines() if not d.startswith("--")
     ],
     package_dir={"": "src"},
-    entry_points={"console_scripts": ["python-kidra = python_kidra.__main__:main"]},
+    entry_points={"console_scripts": ["python-kidra = python_kidra.webservice:main"]},
 )
