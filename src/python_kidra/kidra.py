@@ -6,6 +6,8 @@ from subprocess import Popen
 from typing import Any, Optional, TypeVar
 from pprint import pprint
 
+from fastapi import HTTPException
+
 from python_kidra._version import __version__
 
 import requests
@@ -95,7 +97,14 @@ def get_post_request_fun(service: Service) -> Callable[[dict], dict]:
     """Create a POST request function from the given service"""
 
     def fun(data: dict) -> dict:
-        return requests.post(service.post_address, json=data).json()
+        response = requests.post(service.post_address, json=data)
+
+        if not response.ok:
+            raise HTTPException(
+                status_code=response.status_code, detail=response.json()["detail"]
+            )
+
+        return response.json()
 
     return fun
 
