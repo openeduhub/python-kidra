@@ -8,7 +8,7 @@
     flake-utils.url = "github:numtide/flake-utils";
     nix-filter.url = "github:numtide/nix-filter";
     openapi-checks = {
-      url = "git+https://codeberg.org/joka/nix-openapi-checks";
+      url = "github:openeduhub/nix-openapi-checks";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         nixpkgs-unstable.follows = "nixpkgs-unstable";

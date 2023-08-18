@@ -242,15 +242,15 @@
       "locked": {
         "lastModified": 1692023274,
         "narHash": "sha256-PiL/koPiJ4qa/6fsWjP9scS8CQdBTL9BMzNTJFUQ0pk=",
-        "ref": "refs/heads/main",
+        "owner": "openeduhub",
+        "repo": "nix-openapi-checks",
         "rev": "47dfb71557761242cd8b269d4953087f3a617d1a",
-        "revCount": 3,
-        "type": "git",
-        "url": "https://codeberg.org/joka/nix-openapi-checks"
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "https://codeberg.org/joka/nix-openapi-checks"
+        "owner": "openeduhub",
+        "repo": "nix-openapi-checks",
+        "type": "github"
       }
     },
     "openapi-checks_2": {
