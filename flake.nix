@@ -30,20 +30,22 @@
         */    
         nixpkgs.follows = "nixpkgs";
         flake-utils.follows = "flake-utils";
+        openapi-checks.follows = "openapi-checks";
       };
     };
     wlo-topic-assistant = {
       url = "github:joopitz/wlo-topic-assistant/plainNix";
       # see comment above
       inputs = {
-        nixpkgs.follows = "nixpkgs";
         flake-utils.follows = "flake-utils";
+        openapi-checks.follows = "openapi-checks";
       };
     };
     wlo-classification = {
       url = "github:joopitz/wlo-classification/nix";
       inputs = {
         flake-utils.follows = "flake-utils";
+        openapi-checks.follows = "openapi-checks";
       };
     };
     text-extraction = {
@@ -52,6 +54,7 @@
       inputs = {
         nixpkgs.follows = "nixpkgs";
         flake-utils.follows = "flake-utils";
+        openapi-checks.follows = "openapi-checks";
       };
     };
   };
