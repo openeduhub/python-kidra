@@ -9,6 +9,7 @@
       # inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-filter.url = "github:numtide/nix-filter";
+    nix2container.url = "github:nlewo/nix2container";
   };
 
   outputs = { self, nixpkgs, flake-utils, ... }:
@@ -21,6 +22,8 @@
         };
         # an alias for the python version we are using
         python = pkgs.python310;
+
+        nix2container = self.inputs.nix2container.packages.${system}.nix2container;
         # utility to easily filter out unnecessary files from the source
         nix-filter = self.inputs.nix-filter.lib;
 
@@ -66,12 +69,17 @@
         };
 
         ### declare how the docker image shall be built
-        docker-img = pkgs.dockerTools.buildImage {
+        docker-img = nix2container.buildImage {
           name = python-kidra.pname;
           tag = python-kidra.version;
           config = {
             Cmd = [ "${python-kidra}/bin/python-kidra" ];
           };
+          layers = [
+            (nix2container.buildLayer
+              { deps = [pkgs.text-statistics]; maxLayers = 20;})
+          ];
+          maxLayers = 20;
         };
 
       in {
