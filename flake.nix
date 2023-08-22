@@ -118,12 +118,15 @@
           included in the environment of the kidra, breaking isolation and
           likely causing version conflicts.
           */
-          makeWrapperArgs = [
-            "--prefix PATH : ${pkgs.lib.makeBinPath [pkgs.text-statistics]}"
-            "--prefix PATH : ${pkgs.lib.makeBinPath [pkgs.text-extraction]}"
-            "--prefix PATH : ${pkgs.lib.makeBinPath [pkgs.wlo-topic-assistant]}"
-            "--prefix PATH : ${pkgs.lib.makeBinPath [pkgs.wlo-classification]}"
-          ];
+          makeWrapperArgs =
+            [ "--suffix PATH : ${
+              pkgs.lib.makeBinPath
+                [ pkgs.text-statistics
+                  pkgs.text-extraction
+                  pkgs.wlo-topic-assistant
+                  pkgs.wlo-classification
+                ]}"
+            ];
         };
 
         ### declare how the docker image shall be built
