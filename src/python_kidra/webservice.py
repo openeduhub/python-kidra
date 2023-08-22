@@ -1,121 +1,135 @@
-"""The internal logic of the kidra web-service"""
-import time
-from dataclasses import dataclass
-from subprocess import Popen
-from collections.abc import Callable, Iterable
-from typing import Optional
+import argparse
+from collections.abc import Iterator
+from functools import partial
 
-import cherrypy
 import requests
+import uvicorn
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+
+from python_kidra.kidra import Service, generate_sub_services, custom_openapi
+from python_kidra._version import __version__
 
 
-@dataclass(frozen=True)
-class Service:
-    """Contains all the necessary information about a service"""
-
-    name: str  #: Sub-domain to assign the service in the kidra to
-    binary: str  #: Executable to use to start the service
-    host: str  #: Host domain of the service (usually localhost)
-    port: str  #: Port the service is listening to (must be unique)
-    post_subdomain: Optional[str] = None  #: Sub-domain for POST requests
-    ping_subdomain: str = "_ping"  #: Sub-domain for pinging the service
-    boot_timeout: float = 15  #: Time in seconds to wait for service to boot
-
-    @property
-    def api_address(self) -> str:
-        """Full address for POST requests"""
-        if self.port is not None:
-            return f"http://{self.host}:{self.port}/{self.post_subdomain}"
-        return f"http://{self.host}/{self.post_subdomain}"
-
-    @property
-    def ping_address(self) -> str:
-        """Full address for ping"""
-        if self.port is not None:
-            return f"http://{self.host}:{self.port}/{self.ping_subdomain}"
-        return f"http://{self.host}/{self.ping_subdomain}"
+app = FastAPI(openapi_url="/v3/api-docs")
 
 
-def start_subservice(service: Service) -> None:
-    """Start the given service and wait until it is accessible"""
+class Ports:
+    def __init__(self, start: int):
+        self.current_int = start
+        self.current = str(start)
 
-    print(f"Starting {service.name} on port {service.port}...")
-    Popen(
-        [service.binary, f"--port={service.port}"],
-        stdin=None,
-        stdout=None,
-        stderr=None,
-        close_fds=True,
-        shell=False,
+    def __next__(self) -> str:
+        self.current_int += 1
+        self.current = str(self.current_int)
+
+        return self.current
+
+
+ports = Ports(1986)
+
+# the collection of all services to be collected in the kidra
+SERVICES: dict[str, Service] = {
+    "text-statistics": Service(
+        name="text-statistics",
+        binary="text-statistics",
+        host="localhost",
+        port=next(ports),
+        post_subdomain="analyze-text",
+    ),
+    "text-extraction": Service(
+        name="text-extraction",
+        binary="text-extraction",
+        host="localhost",
+        port=next(ports),
+        post_subdomain="from-url",
+    ),
+    "disciplines": Service(
+        name="disciplines",
+        binary="wlo-classification",
+        host="localhost",
+        port=next(ports),
+        post_subdomain="predict_subjects",
+    ),
+    "topic-assistant-keywords": Service(
+        name="topic-assistant-keywords",
+        binary="wlo-topic-assistant",
+        host="localhost",
+        port=next(ports),
+        post_subdomain="topics_flat",
+        autostart=True,
+        boot_timeout=None,
+    ),
+    "topic-assistant-embeddings": Service(
+        name="topic-assistant-embeddings",
+        binary="",
+        host="localhost",
+        port=ports.current,
+        post_subdomain="topics2_flat",
+        autostart=False,  # already started above
+    ),
+}
+
+
+def main():
+    # define CLI arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--port", action="store", default=8080, help="Port to listen on", type=int
+    )
+    parser.add_argument(
+        "--host", action="store", default="0.0.0.0", help="Hosts to listen to", type=str
+    )
+    parser.add_argument(
+        "--version",
+        action="version",
+        version="%(prog)s {version}".format(version=__version__),
     )
 
-    # try pinging the service and wait until it is up
-    success = False
-    start_time = time.time()
-    while not success:
-        if time.time() - start_time > service.boot_timeout:
-            raise TimeoutError(
-                f"{service.name} took more than the allowed {service.boot_timeout} seconds to become reachable"
-            )
+    # read passed CLI arguments
+    args = parser.parse_args()
 
-        try:
-            r = requests.get(service.ping_address)
-        except requests.exceptions.ConnectionError:
-            time.sleep(0.1)
-        else:
-            success = r.status_code == 200
+    # add all of the defined services
+    generate_sub_services(app, SERVICES.values())
 
-    print("DONE")
+    # manually add the wikipedia linking service
+    dbpedia_service = Service(
+        name="link-wikipedia",
+        binary="",
+        host="wlo.yovisto.com/services",
+        port=None,
+        post_subdomain="extract",
+        autostart=False,  # not directly integrated in the kidra
+    )
 
-
-def get_post_request_fun(service: Service) -> Callable[[dict], dict]:
-    """Create a POST request function from the given service"""
-
+    @app.post(f"/{dbpedia_service.name}")
     def fun(data: dict) -> dict:
-        return requests.post(service.api_address, json=data).json()
+        result = requests.post(
+            dbpedia_service.post_address,
+            # encode as UTF-8 to prevent umlauts etc. causing issues
+            data=data["text"].encode("utf-8"),
+        ).json()
 
-    return fun
+        # the service does not provide a version
+        result["version"] = "0.1.0"
+        return result
 
-
-class KidraService:
-    def __init__(self, services: Iterable[Service]):
-        """Create the kidra with given services, automatically starting them"""
-        self.post_request_funs = dict()
-        for service in services:
-            start_subservice(service)
-            self.post_request_funs[service.name] = get_post_request_fun(service)
-
-    def _cp_dispatch(self, vpath: list[str]):
-        """
-        Override the sub-domain handling
-
-        This way, they can be allocated dynamically
-        """
-        if len(vpath) == 1:
-            # if ping was requested, do not override the path
-            if vpath[0] == "_ping":
-                return self
-
-            # otherwise, modify the request such that it goes to the index
-            cherrypy.request.params["service"] = vpath.pop()
-            return self
-
-        return vpath
-
-    @cherrypy.expose
-    @cherrypy.tools.json_in()
-    @cherrypy.tools.json_out()
-    def index(self, service: str):
-        """Access the given service through the kidra"""
-        try:
-            return self.post_request_funs[service](cherrypy.request.json)
-
-        except KeyError:
-            raise cherrypy.HTTPError(
-                status=404, message=f'Service "{service}" could not be found'
-            )
-
-    @cherrypy.expose
-    def _ping(self):
-        """Return an empty HTTP response, for healthchecks"""
+    # add a ping function
+    @app.get("/_ping")
+    def _ping():
         pass
+
+    # override the openapi by merging the ones of the sub-services
+    app.openapi = partial(custom_openapi, app=app, services=SERVICES.values())
+
+    # start the web service
+    uvicorn.run(
+        app,
+        host=args.host,
+        port=args.port,
+        reload=False,
+    )
+
+
+if __name__ == "__main__":
+    main()

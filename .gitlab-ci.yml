@@ -3,4 +3,5 @@ Build and push Docker image:
   image:
     name: "nixpkgs/nix-flakes:nixos-23.05"
   script:
+    - nix flake check
     - nix run ".#docker.copyTo" -- --dest-creds=$DOCKER_USERNAME:$DOCKER_PASSWORD docker://$DOCKER_REGISTRY/projects/wlo/python-kidra:$CI_COMMIT_REF_SLUG
