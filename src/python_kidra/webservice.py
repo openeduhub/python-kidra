@@ -93,6 +93,22 @@ def main():
     generate_sub_services(app, SERVICES.values())
 
     # manually add the wikipedia linking service
+    class Data(BaseModel):
+        text: str
+
+    class Entity(BaseModel):
+        entity: str
+        start: int
+        end: int
+        score: float
+        categories: list[str]
+
+    class Result(BaseModel):
+        text: str
+        entities: list[Entity]
+        essentialCategories: list[str]
+        version: str = "0.1.0"
+
     dbpedia_service = Service(
         name="link-wikipedia",
         binary="",
@@ -102,17 +118,68 @@ def main():
         autostart=False,  # not directly integrated in the kidra
     )
 
-    @app.post(f"/{dbpedia_service.name}")
-    def fun(data: dict) -> dict:
+    summary = "Collect relevant Wikipedia articles for the given text"
+
+    @app.post(
+        f"/{dbpedia_service.name}",
+        summary=summary,
+        description=f"""
+        {summary}
+
+        Parameters
+        ----------
+        text : str
+            The text to be analyzed.
+
+        Returns
+        -------
+        text : str
+            A modified version of the given text,
+            where matched phrases are replaced with hyperlinks to their
+            corresponding Wikipedia entry.
+        entities : list of Entity
+            All Wikipedia entries that were matched for the given text.
+            Contains the following attributes:
+
+            entity : str
+                The name of the entry.
+            start : int
+                The start position of the phrase that was matched to this entity.
+            end : int
+                The end position of the phrase that was matched to this entity.
+            score : float
+                The score (from 0 to 1) of the match.
+            categories : list of str
+                The German Wikipedia categories associated with this entity.
+        essentialCategories : list of str
+            A list of German Wikipedia categories that are shared between
+            multiple associated entities.
+        version : str
+            The version of the Wikipedia linking service.
+            Currently a placeholder.
+        """,
+    )
+    def fun(data: Data) -> Result:
         result = requests.post(
             dbpedia_service.post_address,
             # encode as UTF-8 to prevent umlauts etc. causing issues
-            data=data["text"].encode("utf-8"),
+            data=data.text.encode("utf-8"),
         ).json()
 
-        # the service does not provide a version
-        result["version"] = "0.1.0"
-        return result
+        return Result(
+            text=result["text"],
+            entities=[
+                Entity(
+                    entity=ent["entity"],
+                    start=ent["start"],
+                    end=ent["end"],
+                    score=ent["score"],
+                    categories=ent["categories"],
+                )
+                for ent in result["entities"]
+            ],
+            essentialCategories=result["essentialCategories"],
+        )
 
     # add a ping function
     @app.get("/_ping")

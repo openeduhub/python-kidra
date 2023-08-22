@@ -224,6 +224,22 @@
         "type": "github"
       }
     },
+    "nltk-data_3": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1675306065,
+        "narHash": "sha256-RFywUkesoUL8tbiKLs6Pa+NpoEOq9eu1dP83n5XkNpY=",
+        "owner": "nltk",
+        "repo": "nltk_data",
+        "rev": "5db857e6f7df11eabb5e5665836db9ec8df07e28",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nltk",
+        "repo": "nltk_data",
+        "type": "github"
+      }
+    },
     "oeh-metadata-vocabs": {
       "flake": false,
       "locked": {
@@ -309,11 +325,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1692353770,
-        "narHash": "sha256-CUlULDXABwIEVU7xBRwYyYN3UdInJskMWUmsXsTuP1Y=",
+        "lastModified": 1692705345,
+        "narHash": "sha256-PTgPozJU7mTv1FcTHXEPf7dG0Sv6R0wyzxoQs/vRcDk=",
         "owner": "openeduhub",
         "repo": "text-extraction",
-        "rev": "b06f76feb8b58bbda4e0e01132e5c759a63c339b",
+        "rev": "37ff9571bd8979eb58acb3346204178e470b2bed",
         "type": "github"
       },
       "original": {
@@ -331,16 +347,17 @@
           "nixpkgs"
         ],
         "nixpkgs-unstable": "nixpkgs-unstable_2",
+        "nltk-data": "nltk-data",
         "openapi-checks": [
           "openapi-checks"
         ]
       },
       "locked": {
-        "lastModified": 1692186513,
-        "narHash": "sha256-5pIbtS76/doRAYxXypGskqLcv900Uy2qzQSDSFSBwbQ=",
+        "lastModified": 1692702627,
+        "narHash": "sha256-DrTlQgv0dWSnXjarTUw6EEEKV0Yy+qiz4Z5WsVWXGy0=",
         "owner": "openeduhub",
         "repo": "text-statistics",
-        "rev": "0d456cef9d2da1ec793f81d64412c240f2a00162",
+        "rev": "081b019767e5ff494feb42b076cce5176a58914b",
         "type": "github"
       },
       "original": {
@@ -355,17 +372,17 @@
           "flake-utils"
         ],
         "nixpkgs": "nixpkgs_3",
-        "nltk-data": "nltk-data",
+        "nltk-data": "nltk-data_2",
         "openapi-checks": [
           "openapi-checks"
         ]
       },
       "locked": {
-        "lastModified": 1692687246,
-        "narHash": "sha256-FxAk2rl8s1gMnVA+pece74wbkdjnRpl/NqsWrMlt4BE=",
+        "lastModified": 1692706608,
+        "narHash": "sha256-5BNn2L4i7hmE8bapiYO03tkkTPoqPu7UlaFmNE01ipc=",
         "owner": "joopitz",
         "repo": "wlo-classification",
-        "rev": "1ab7390256bb3f4e229335f0d307c06036a67353",
+        "rev": "7eba1e961a4bd0346114d20ff7d8908b9550f8d3",
         "type": "github"
       },
       "original": {
@@ -382,18 +399,18 @@
         ],
         "nix-filter": "nix-filter_3",
         "nixpkgs": "nixpkgs_4",
-        "nltk-data": "nltk-data_2",
+        "nltk-data": "nltk-data_3",
         "oeh-metadata-vocabs": "oeh-metadata-vocabs",
         "openapi-checks": [
           "openapi-checks"
         ]
       },
       "locked": {
-        "lastModified": 1692624239,
-        "narHash": "sha256-D49fTDJ6vT9bqe9+Ew3Ik5AYYJU9Ze3RUS/cK7ZkATw=",
+        "lastModified": 1692707569,
+        "narHash": "sha256-a8xDc316ufGxwLYrWBf7Egz9onVDtIJlpDGQmWQgeSE=",
         "owner": "joopitz",
         "repo": "wlo-topic-assistant",
-        "rev": "48298abbad8e06b0b26a9389c6d0123fda34b327",
+        "rev": "fcba41f1623727a7735887b1d5ebbbd08bdc56b2",
         "type": "github"
       },
       "original": {
