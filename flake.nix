@@ -7,6 +7,7 @@
     # utilities
     flake-utils.url = "github:numtide/flake-utils";
     nix-filter.url = "github:numtide/nix-filter";
+    nix2container.url = "github:nlewo/nix2container";
     openapi-checks = {
       url = "github:openeduhub/nix-openapi-checks";
       inputs = {
@@ -76,6 +77,8 @@
         pkgs-unstable = import nixpkgs-unstable {inherit system;};
         # an alias for the python version we are using
         python = pkgs.python310;
+
+        nix2container = self.inputs.nix2container.packages.${system}.nix2container;
         # utility to easily filter out unnecessary files from the source
         nix-filter = self.inputs.nix-filter.lib;
         openapi-checks = self.inputs.openapi-checks.lib.${system};
@@ -130,7 +133,7 @@
         };
 
         ### declare how the docker image shall be built
-        docker-spec = {
+        docker-img = nix2container.buildImage {
           name = python-kidra.pname;
           tag = python-kidra.version;
           config = {
@@ -139,14 +142,20 @@
               "8080/tcp" = {};
             };
           };
-          maxLayers = 120;
+          layers =
+            (map
+              (pkg: nix2container.buildLayer {deps = [pkg]; maxLayers = 20;})
+              [ pkgs.text-statistics
+                pkgs.text-extraction
+                pkgs.wlo-topic-assistant
+                pkgs.wlo-classification
+              ]);
+          maxLayers = 20;
         };
-        docker-img = pkgs.dockerTools.buildLayeredImage docker-spec;
-        docker-stream = pkgs.dockerTools.streamLayeredImage docker-spec;
 
       in {
         packages = rec {
-          inherit python-kidra docker-stream;
+          inherit python-kidra;
           docker = docker-img;
           default = python-kidra;
         };

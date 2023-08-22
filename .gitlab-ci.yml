@@ -4,8 +4,4 @@ Build and push Docker image:
     name: "nixpkgs/nix-flakes:nixos-23.05"
   script:
     - nix flake check
-    - nix build ".#docker-stream"
-    - nix profile install "nixpkgs#skopeo" "nixpkgs#gzip"
-    - skopeo login $DOCKER_REGISTRY -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-    - mkdir tmp
-    - ./result | gzip --fast | skopeo copy --insecure-policy --tmpdir tmp docker-archive:/dev/stdin docker://$DOCKER_REGISTRY/projects/wlo/python-kidra:$CI_COMMIT_REF_SLUG
+    - nix run ".#docker.copyTo" -- --dest-creds=$DOCKER_USERNAME:$DOCKER_PASSWORD docker://$DOCKER_REGISTRY/projects/wlo/python-kidra:$CI_COMMIT_REF_SLUG
