@@ -15,12 +15,14 @@ An OCI-compliant image can be built in one of two ways:
 
 ** Build using Nix
 
-Ensure that nix is installed with flakes support. Then, simply run
+Ensure that nix is installed with flakes support. Then, the image can be copied directly to the ~Docker~ or ~podman~ daemon through
 #+begin_src sh
-nix build github:openeduhub/python-kidra#docker
+nix run github:openeduhub/python-kidra/additional-services#docker.copyToDockerDaemon
 #+end_src
-
-The image will be available as =result= in the current directory.
+or
+#+begin_src sh
+nix run github:openeduhub/python-kidra/additional-services#docker.copyToPodman
+#+end_src
 
 ** Build using Docker
 
@@ -36,14 +38,14 @@ The image will be available as =result=.
 
 - Note: in order to reduce the amount of redundant building in future build processes, a persistent build-container =kidra-builder= is created as part of the script. This container will contain a cache of all used artifacts of previous builds. While it is safe to remove it afterwards, this will cause a full re-build when running the script again.
 
-** Load & run the image
-
 Now, load the created image through
 #+begin_src sh
 docker load -i result
 #+end_src
-
 A message will appear to confirm that the image has been loaded, including its name and version.
+
+** Run the Image
+
 Now, start the service through
 #+begin_src sh
 docker run -p 8080:8080 python-kidra:<version>
