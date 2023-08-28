@@ -454,11 +454,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1692784726,
-        "narHash": "sha256-1u+WueSa482cajURcb+99Q/c29IKAhpmkmkA1oZQVIY=",
+        "lastModified": 1692888448,
+        "narHash": "sha256-xryUv0pSsjnDxrC5MEKq0Jf7t+uLzXAkTor+gTzK9a8=",
         "owner": "openeduhub",
         "repo": "text-statistics",
-        "rev": "91d7fd26a17fa90869bd47063c88690c839b461a",
+        "rev": "9ed42f86c045e492eb17962ec597571a25adb782",
         "type": "github"
       },
       "original": {
@@ -507,11 +507,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1692707569,
-        "narHash": "sha256-a8xDc316ufGxwLYrWBf7Egz9onVDtIJlpDGQmWQgeSE=",
+        "lastModified": 1692964239,
+        "narHash": "sha256-yqMyKvBdkpmAdp0C9QTpupVREYEtooipIK/ZynHcIL4=",
         "owner": "joopitz",
         "repo": "wlo-topic-assistant",
-        "rev": "fcba41f1623727a7735887b1d5ebbbd08bdc56b2",
+        "rev": "a064bdbfd14a421823832c723a833b59e8dbfc1e",
         "type": "github"
       },
       "original": {
