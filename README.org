@@ -17,11 +17,11 @@ An OCI-compliant image can be built in one of two ways:
 
 Ensure that nix is installed with flakes support. Then, the image can be copied directly to the ~Docker~ or ~podman~ daemon through
 #+begin_src sh
-nix run github:openeduhub/python-kidra/additional-services#docker.copyToDockerDaemon
+nix run "git+https://scm.edu-sharing.com/edu-sharing/projects/wlo/python-kidra?ref=additional-services#docker.copyToDockerDaemon"
 #+end_src
 or
 #+begin_src sh
-nix run github:openeduhub/python-kidra/additional-services#docker.copyToPodman
+nix run "git+https://scm.edu-sharing.com/edu-sharing/projects/wlo/python-kidra?ref=additional-services#docker.copyToPodman"
 #+end_src
 
 ** Build using Docker
@@ -55,7 +55,7 @@ docker run -p 8080:8080 python-kidra:<version>
 
 This service can also be run and installed as a native ~Nix~ ~Flake~ application. In particular, the following command will run the service locally:
 #+begin_src sh
-nix run github:openeduhub/python-kidra/separate-packages
+nix run "git+https://scm.edu-sharing.com/edu-sharing/projects/wlo/python-kidra?ref=additional-services"
 #+end_src
 
 * API
