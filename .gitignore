@@ -1,5 +1,4 @@
 /.direnv/
-/.envrc
 /src/__pycache__/
 /build/
 /result
