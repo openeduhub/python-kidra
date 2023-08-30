@@ -15,6 +15,7 @@ app = FastAPI(openapi_url="/v3/api-docs")
 
 
 class Ports:
+    """Generator of unique ports, starting at a given value."""
     def __init__(self, start: int):
         self.current_int = start
         self.current = str(start)
