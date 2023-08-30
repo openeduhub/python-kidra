@@ -36,7 +36,7 @@ sh build.sh
 
 The image will be available as =result=.
 
-- Note: in order to reduce the amount of redundant building in future build processes, a persistent build-container =kidra-builder= is created as part of the script. This container will contain a cache of all used artifacts of previous builds. While it is safe to remove it afterwards, this will cause a full re-build when running the script again.
+- Note: in order to reduce the amount of redundant building in future build processes, a persistent build-container =kidra-builder= is created as part of the script. This container will contain a cache of all used artifacts of previous builds. While it is safe to remove it afterward, this will cause a full re-build when running the script again.
 
 Now, load the created image through
 #+begin_src sh
@@ -69,10 +69,10 @@ The following services are currently available from the ~Kidra~:
 
 * API
 
-Each individual service available through this API is located on another sub-domain.
+Each individual service available through this API is located on another subdomain.
 The input data, and potential parameters, are passed as JSON objects.
 
-Once the service is running, an interface listing all of the available end-points and their documentation is available at [[http://localhost:8080/docs]].
+Once the service is running, an interface listing all the available end-points and their documentation is available at [[http://localhost:8080/docs]].
 
 Additionally, this service implements an [[https://www.openapis.org/][OpenAPI]] specification, which is accessible from the =/v3/api-docs= end-point.
 
@@ -891,3 +891,53 @@ curl -d \
 }
 #+end_src
 
+
+* Development
+
+** Development environment
+
+To ensure that all Python packages with their correct versions are installed, we recommend using ~Nix~. The development environment can be activated locally by running
+#+begin_src shell
+nix develop
+#+end_src
+while inside this project.
+
+With [[https://direnv.net/][direnv]] installed, this process can be automated such that the development environment will be loaded whenever the project is visited. To allow ~direnv~ to activate the environment automatically, run
+#+begin_src shell
+direnv allow
+#+end_src
+while inside this project.
+
+** Adding additional services
+
+*** Prerequisites
+
+As a prerequisite to adding a new service to the ~Kidra~, the service in question must implement a web-service that exposes the service's functionality through =POST= requests. Ideally, the service also provides an [[https://www.openapis.org/][OpenAPI]] specification, which will then be automatically integrated.
+
+If the service shall be packaged as part of the ~Kidra~ and be run as part of it, this web-service must also offer a way to specify the port on which it shall run at. For this, we recommend a CLI flag =--port=.
+
+*** Making a service accessible in the web-service
+
+All services are added to the ~Kidra~ web-service in [[file:./src/python_kidra/webservice.py][webservice.py]]. Here, you have two primary options:
+
+1. Add information about the service to =SERVICES=.
+   Services collected in =SERVICES= will be automatically added to the web-service according to the information and parameters provided.
+   - =name= :: defines the name of the end-point in the ~Kidra~ that links to the service.
+   - =autostart= :: whether to automatically start the service from the ~Kidra~.
+     If the service shall be automatically started, it must be available to the ~Kidra~, see [[Installing a new service]]
+   - =boot_timeout= :: the number of seconds to wait for the service to start. No timeout is enforced when set to =None=.
+   - =binary= :: the name of the executable that is run when the service shall be started from within the ~Kidra~.
+   - =host= :: the host to contact when trying to access the service. Should be set to ="localhost"= if the service is started as part of the ~Kidra~.
+   - =port= :: the port to start the service with when automatically starting it. This is also the port that delegated requests to the service are sent to.
+   - =post_subdomain= :: the subdomain of the service to access when delegating a request to it.
+   - =openapi_schema= :: the subdomain of the service on which the OpenAPI specification is available.
+     
+2. Alternatively, manually add an end-point to the ~FastAPI~ application (see [[https://fastapi.tiangolo.com/tutorial/first-steps/]])
+
+*** Installing a new service
+
+When a service shall be started as part of the ~Kidra~ (i.e. it is not an external service that might run on a different system), it must be added to the run-time environment.
+
+1. If the service has already been packaged in [[https://github.com/NixOS/nixpkgs][nixpkgs]], no further work is necessary here. Otherwise, we recommend packaging the service as a Flake and providing it as an input in [[file:.//flake.nix][flake.nix]] (see the other sub-services, such as =text-statistics=).
+   
+2. Make the binaries of the service available to the ~Kidra~ in =makeWrapperArgs= of the build specification of =python-kidra=. For this, it should suffice to simply include the application's package in the list provided to =pkgs.lib.makeBinPath=.
