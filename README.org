@@ -29,7 +29,7 @@ nix run "git+https://scm.edu-sharing.com/edu-sharing/projects/wlo/python-kidra?r
 The image can also be built without a local nix installation through bootstrapping. For this, another docker image, containing a nix installation with flakes support, will be used.
 Make sure to be inside of repository before running =build.sh=; it will not work otherwise.
 #+begin_src sh
-git clone https://github.com/openeduhub/python-kidra.git
+git clone -b additional-services https://scm.edu-sharing.com/edu-sharing/projects/wlo/python-kidra
 cd python-kidra
 sh build.sh
 #+end_src
@@ -58,12 +58,25 @@ This service can also be run and installed as a native ~Nix~ ~Flake~ application
 nix run "git+https://scm.edu-sharing.com/edu-sharing/projects/wlo/python-kidra?ref=additional-services"
 #+end_src
 
+* Implemented Services
+
+The following services are currently available from the ~Kidra~:
+- [[https://github.com/openeduhub/text-extraction][text-extraction]]: Extract text from URLs
+- [[https://github.com/openeduhub/text-statistics][text-statistics]]: Calculate various metrics on text, e.g. reading time or readability
+- [[https://github.com/yovisto/wlo-topic-assistant][wlo-topic-assistant]]: Find [[https://vocabs.openeduhub.de/w3id.org/openeduhub/vocabs/oeh-topics/5e40e372-735c-4b17-bbf7-e827a5702b57.html][WLO topics]] in texts
+- [[https://github.com/yovisto/wlo-classification][wlo-classification]]: Predict [[https://vocabs.openeduhub.de/w3id.org/openeduhub/vocabs/discipline/index.html][disciplines]] relevant for texts
+- [[https://github.com/yovisto/kea-el][kea]]: Link relevant Wikipedia articles found in texts
+
 * API
 
 Each individual service available through this API is located on another sub-domain.
 The input data, and potential parameters, are passed as JSON objects.
 
-** Ping
+Once the service is running, an interface listing all of the available end-points and their documentation is available at [[http://localhost:8080/docs]].
+
+Additionally, this service implements an [[https://www.openapis.org/][OpenAPI]] specification, which is accessible from the =/v3/api-docs= end-point.
+
+** Ping :noexport:
 
 A simple GET request can be posted to the =_ping= sub-domain. This will return an empty message with status code 200 if the service is running.
 
@@ -82,7 +95,7 @@ curl -i \
 : 
 : {"detail":"Not Found"}
 
-** Text statistics
+** Text statistics :noexport:
 
 Accessible through the =text-statistics/= sub-domain.
 
@@ -150,7 +163,7 @@ curl -d '{"text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed 
 }
 #+end_src
 
-** Disciplines prediction
+** Disciplines prediction :noexport:
 
 Accessible through the =disciplines= sub-domain.
 
@@ -188,7 +201,7 @@ curl -d \
 }
 #+end_src
 
-** Topic assistant
+** Topic assistant :noexport:
 
 Accessible through the =topic-assistant-keywords= and =topic-assistant-embeddings/= sub-domains.
 
@@ -783,7 +796,7 @@ curl -d \
 }
 #+end_src
 
-** Wikipedia categories
+** Wikipedia categories :noexport:
 
 Accessible through the =link-wikipedia/= sub-domain.
 
