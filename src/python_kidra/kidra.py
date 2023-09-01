@@ -4,7 +4,6 @@ from collections.abc import Callable, Iterable, Iterator
 from dataclasses import dataclass
 from subprocess import Popen
 from typing import Any, Optional, TypeVar
-from pprint import pprint
 
 from fastapi import HTTPException
 
@@ -14,6 +13,21 @@ import requests
 from fastapi.openapi.utils import get_openapi
 
 
+def _make_domain(host: str, subdomain: str, port: Optional[str] = None) -> str:
+    """
+    Combine the host and subdomain, optionally with a port.
+
+    If the port is not given,
+    the request is assumed to be on a remote web service through HTTPS.
+    Otherwise, the request is via HTTP.
+    """
+    return (
+        f"http://{host}:{port}/{subdomain}"
+        if port is not None
+        else f"https://{host}/{subdomain}"
+    )
+
+
 @dataclass(frozen=True)
 class Service:
     """Contains all the necessary information about a service"""
@@ -21,10 +35,8 @@ class Service:
     name: str  #: Sub-domain to assign the service in the kidra to
     binary: str  #: Executable to use to start the service
     host: str  #: Host domain of the service (usually localhost)
-    port: Optional[
-        str
-    ] = None  #: Port the service is listening to (must be unique if autostarting)
-    post_subdomain: Optional[str] = None  #: Sub-domain for POST requests
+    port: Optional[str] = None  #: Port the service is listening to
+    post_subdomain: str = ""  #: Sub-domain for POST requests
     ping_subdomain: str = "_ping"  #: Sub-domain for pinging the service
     openapi_schema: str = (
         "openapi.json"  #: Sub-domain for getting the api of the service
@@ -37,23 +49,17 @@ class Service:
     @property
     def post_address(self) -> str:
         """Full address for POST requests"""
-        if self.port is not None:
-            return f"http://{self.host}:{self.port}/{self.post_subdomain}"
-        return f"https://{self.host}/{self.post_subdomain}"
+        return _make_domain(self.host, self.post_subdomain, self.port)
 
     @property
     def api_schema_address(self) -> str:
         """Full address for POST requests"""
-        if self.port is not None:
-            return f"http://{self.host}:{self.port}/{self.openapi_schema}"
-        return f"https://{self.host}/{self.openapi_schema}"
+        return _make_domain(self.host, self.openapi_schema, self.port)
 
     @property
     def ping_address(self) -> str:
         """Full address for ping"""
-        if self.port is not None:
-            return f"http://{self.host}:{self.port}/{self.ping_subdomain}"
-        return f"https://{self.host}/{self.ping_subdomain}"
+        return _make_domain(self.host, self.ping_subdomain, self.port)
 
 
 def start_subservice(service: Service) -> None:

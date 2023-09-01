@@ -1,10 +1,9 @@
 import argparse
-from collections.abc import Iterator
 from functools import partial
 
 import requests
 import uvicorn
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from pydantic import BaseModel
 
 from python_kidra.kidra import Service, generate_sub_services, custom_openapi
@@ -16,6 +15,7 @@ app = FastAPI(openapi_url="/v3/api-docs")
 
 class Ports:
     """Generator of unique ports, starting at a given value."""
+
     def __init__(self, start: int):
         self.current_int = start
         self.current = str(start)
