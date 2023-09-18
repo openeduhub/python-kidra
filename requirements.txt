@@ -1,2 +1,4 @@
-cherrypy
+fastapi
+pydantic
+uvicorn
 requests
