@@ -69,6 +69,14 @@ SERVICES: dict[str, Service] = {
         post_subdomain="topics2_flat",
         autostart=False,  # already started above
     ),
+    "similarity-score": Service(
+        name="similarity-score",
+        binary="similarity_score",
+        host="localhost",
+        port=next(ports),
+        post_subdomain="soft_scores",
+        autostart=True,  # already started above
+    ),
 }
 
 

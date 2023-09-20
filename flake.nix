@@ -57,7 +57,16 @@
         openapi-checks.follows = "openapi-checks";
       };
     };
+    similarity-score = {
+      url = "github:andresGranadosC/similarity_metadata";
+      # see comment above
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "flake-utils";
+      };
+    };
   };
+
 
   outputs = { self, nixpkgs, nixpkgs-unstable, flake-utils, ... }:
     flake-utils.lib.eachDefaultSystem
@@ -73,6 +82,10 @@
               self.inputs.wlo-classification.overlays.default
             ];
           };
+
+          similarity-score =
+            self.inputs.similarity-score.packages.${system}.default;
+
           # swagger-cli is only available in nixpkgs unstable
           pkgs-unstable = import nixpkgs-unstable { inherit system; };
           # an alias for the python version we are using
@@ -121,6 +134,7 @@
                 pkgs.text-extraction
                 pkgs.wlo-topic-assistant
                 pkgs.wlo-classification
+                similarity-score
               ]
             }"
             ];
@@ -175,7 +189,7 @@
                 service-bin = "${python-kidra}/bin/python-kidra";
                 openapi-domain = "v3/api-docs";
                 memory-size = 6144;
-                skip-endpoints = [ "/link-wikipedia" "/text-extraction" ];
+                skip-endpoints = [ "/link-wikipedia" "/text-extraction" "/similarity-score" ];
               };
             });
         });
