@@ -173,7 +173,8 @@
             {
               test-service = openapi-checks.test-service {
                 service-bin = "${python-kidra}/bin/python-kidra";
-                openapi-domain = "v3/api-docs";
+                service-port = 8080;
+                openapi-domain = "/v3/api-docs";
                 memory-size = 6144;
                 skip-endpoints = [ "/link-wikipedia" "/text-extraction" ];
               };
