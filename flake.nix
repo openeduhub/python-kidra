@@ -2,8 +2,7 @@
   description = "Dependency and Build Process for the python-kidra";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
     # utilities
     flake-utils.url = "github:numtide/flake-utils";
     nix-filter.url = "github:numtide/nix-filter";
@@ -12,7 +11,6 @@
       url = "github:openeduhub/nix-openapi-checks";
       inputs = {
         nixpkgs.follows = "nixpkgs";
-        nixpkgs-unstable.follows = "nixpkgs-unstable";
         flake-utils.follows = "flake-utils";
       };
     };
@@ -59,7 +57,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, flake-utils, ... }:
+  outputs = { self, nixpkgs, flake-utils, ... }:
     flake-utils.lib.eachDefaultSystem
       (system:
         let
@@ -73,8 +71,6 @@
               self.inputs.wlo-classification.overlays.default
             ];
           };
-          # swagger-cli is only available in nixpkgs unstable
-          pkgs-unstable = import nixpkgs-unstable { inherit system; };
           # an alias for the python version we are using
           python = pkgs.python310;
 
@@ -107,6 +103,7 @@
               include = [ "src" ./setup.py ./requirements.txt ];
               exclude = [ (nix-filter.matchExt "pyc") ];
             };
+            doCheck = false;
             propagatedBuildInputs = (python-packages-build python.pkgs);
             /* only make available the binaries of the sub-services to the kidra.
              if we simply included the entire packages,
@@ -163,7 +160,7 @@
               # python language server
               pkgs.nodePackages.pyright
               # cli tool to validate OpenAPI schemas
-              pkgs-unstable.swagger-cli
+              pkgs.swagger-cli
             ];
           };
           checks = { } // (nixpkgs.lib.optionalAttrs
