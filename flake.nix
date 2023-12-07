@@ -55,6 +55,14 @@
         openapi-checks.follows = "openapi-checks";
       };
     };
+    its-jointprobability = {
+      url = "github:openeduhub/its-jointprobability";
+      # see comment above
+      inputs = {
+        flake-utils.follows = "flake-utils";
+        openapi-checks.follows = "openapi-checks";
+      };
+    };
   };
 
   outputs = { self, nixpkgs, flake-utils, ... }:
@@ -69,6 +77,7 @@
               self.inputs.text-extraction.overlays.default
               self.inputs.wlo-topic-assistant.overlays.default
               self.inputs.wlo-classification.overlays.default
+              self.inputs.its-jointprobability.overlays.default
             ];
           };
           # an alias for the python version we are using
@@ -97,7 +106,7 @@
           ### declare how the python application shall be built
           python-kidra = python.pkgs.buildPythonApplication rec {
             pname = "python-kidra";
-            version = "1.1.3";
+            version = "1.2.0";
             src = nix-filter {
               root = self;
               include = [ "src" ./setup.py ./requirements.txt ];
@@ -118,6 +127,7 @@
                 pkgs.text-extraction
                 pkgs.wlo-topic-assistant
                 pkgs.wlo-classification
+                pkgs.its-jointprobability
               ]
             }"
             ];
@@ -138,6 +148,7 @@
                 pkgs.text-extraction
                 pkgs.wlo-topic-assistant
                 pkgs.wlo-classification
+                pkgs.its-jointprobability
               ]);
             maxLayers = 20;
           };
@@ -173,7 +184,11 @@
                 service-port = 8080;
                 openapi-domain = "/v3/api-docs";
                 memory-size = 6144;
-                skip-endpoints = [ "/link-wikipedia" "/text-extraction" ];
+                skip-endpoints = [
+                  "/link-wikipedia"
+                  "/text-extraction"
+                  "/disciplines-new-update"
+                ];
               };
             });
         });
