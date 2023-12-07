@@ -184,7 +184,11 @@ def custom_openapi(app, services: Iterable[Service]):
                 if type(value) is not str:
                     continue
 
-                if "components/schemas" in value:
+                if (
+                    "components/schemas" in value
+                    # do not add the prefix multiple times
+                    and f"components/schemas/{service_prefix}" not in value
+                ):
                     __apply_nested(
                         path,
                         keys,
