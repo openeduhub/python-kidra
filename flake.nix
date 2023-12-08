@@ -142,15 +142,18 @@
               ExposedPorts = { "8080/tcp" = { }; };
             };
             layers = (map
-              (pkg: nix2container.buildLayer { deps = [ pkg ]; maxLayers = 20; })
+              ({ pkg, maxLayers }:
+                nix2container.buildLayer {
+                  deps = [ pkg ]; inherit maxLayers;
+                })
               [
-                pkgs.text-statistics
-                pkgs.text-extraction
-                pkgs.wlo-topic-assistant
-                pkgs.wlo-classification
-                pkgs.its-jointprobability
+                { pkg = pkgs.text-statistics; maxLayers = 5; }
+                { pkg = pkgs.text-extraction; maxLayers = 5; }
+                { pkg = pkgs.wlo-topic-assistant; maxLayers = 30; }
+                { pkg = pkgs.wlo-classification; maxLayers = 30; }
+                { pkg = pkgs.its-jointprobability; maxLayers = 30; }
               ]);
-            maxLayers = 20;
+            maxLayers = 5;
           };
 
         in
