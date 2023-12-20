@@ -21,10 +21,11 @@
         /* override inputs to follow ours.
            while this causes the resulting package / image to be much smaller,
            this setting is risky and may cause breaks later, as we are now
-           controlling the package versions of this sub-service here, rather than
-           in the service itself.
-           as a result, updates / changes to the package versions in the service
-           will not actually affect anything for the service run within the kidra.
+           controlling the package versions of this sub-service here,
+           rather than in the service itself.
+           as a result, updates to the package versions in the service
+           will not actually affect anything for the service
+           run within the kidra.
         */
         nixpkgs.follows = "nixpkgs";
         flake-utils.follows = "flake-utils";
@@ -33,7 +34,6 @@
     };
     wlo-topic-assistant = {
       url = "github:joopitz/wlo-topic-assistant/plainNix";
-      # see comment above
       inputs = {
         flake-utils.follows = "flake-utils";
         openapi-checks.follows = "openapi-checks";
@@ -48,8 +48,8 @@
     };
     text-extraction = {
       url = "github:openeduhub/text-extraction";
-      # see comment above
       inputs = {
+        # see comment above
         nixpkgs.follows = "nixpkgs";
         flake-utils.follows = "flake-utils";
         openapi-checks.follows = "openapi-checks";
@@ -57,7 +57,6 @@
     };
     its-jointprobability = {
       url = "github:openeduhub/its-jointprobability";
-      # see comment above
       inputs = {
         flake-utils.follows = "flake-utils";
         openapi-checks.follows = "openapi-checks";
