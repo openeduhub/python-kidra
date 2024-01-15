@@ -93,11 +93,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1701956659,
-        "narHash": "sha256-LR+JR0y1wm8lBMY+9fe7TSXWKrQJZgnfCvcU6uMGVek=",
+        "lastModified": 1705334107,
+        "narHash": "sha256-sif0gNirqpnVQpZUNt0z9vIQC3y1UMJVgLBHSVteF7s=",
         "owner": "openeduhub",
         "repo": "its-jointprobability",
-        "rev": "93a20f6ce9ae849b3c06c20ab75a8e9c85ee93e1",
+        "rev": "54bf4c96d507d5f750120bb68e203e2503f714e0",
         "type": "github"
       },
       "original": {

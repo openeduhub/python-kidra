@@ -45,22 +45,14 @@ SERVICES: dict[str, Service] = {
         port=next(ports),
         post_subdomain="from-url",
     ),
-    # "its-jointprobability": Service(
-    #     name="disciplines-new",
-    #     binary="its-jointprobability",
-    #     host="localhost",
-    #     port=next(ports),
-    #     post_subdomain="predict_disciplines",
-    #     autostart=True,
-    # ),
-    # "its-jointprobability-update": Service(
-    #     name="disciplines-new-update",
-    #     binary="",
-    #     host="localhost",
-    #     port=ports.current,
-    #     post_subdomain="update_model",
-    #     autostart=False,  # already started above
-    # ),
+    "its-jointprobability": Service(
+        name="disciplines-new",
+        binary="its-jointprobability",
+        host="localhost",
+        port=next(ports),
+        post_subdomain="predict_disciplines",
+        autostart=True,
+    ),
     "disciplines": Service(
         name="disciplines",
         binary="wlo-classification",
