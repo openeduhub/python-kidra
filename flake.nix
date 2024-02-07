@@ -105,7 +105,7 @@
           ### declare how the python application shall be built
           python-kidra = python.pkgs.buildPythonApplication rec {
             pname = "python-kidra";
-            version = "1.2.0";
+            version = "1.2.1";
             src = nix-filter {
               root = self;
               include = [ "src" ./setup.py ./requirements.txt ];
