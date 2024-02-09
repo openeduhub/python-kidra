@@ -38,6 +38,21 @@ SERVICES: dict[str, Service] = {
         port=next(ports),
         post_subdomain="analyze-text",
     ),
+    "topic-statistics": Service(
+        name="topic-statistics",
+        binary="topic-statistics",
+        host="localhost",
+        port=next(ports),
+        post_subdomain="counts",
+    ),
+    "update-data": Service(
+        name="update-data",
+        binary="",
+        host="localhost",
+        port=ports.current,
+        post_subdomain="update-data",
+        autostart=False,  # already started above
+    ),
     "text-extraction": Service(
         name="text-extraction",
         binary="text-extraction",
@@ -90,6 +105,26 @@ def main():
         "--host", action="store", default="0.0.0.0", help="Hosts to listen to", type=str
     )
     parser.add_argument(
+        "--username",
+        action="store",
+        default=None,
+        help="The username to use when running a data update and authenticating at the source.",
+        type=str,
+    )
+    parser.add_argument(
+        "--password",
+        action="store",
+        default=None,
+        help="The password to use when running a data update and authenticating at the source.",
+        type=str,
+    )
+    parser.add_argument(
+        "--data-dir",
+        action="store",
+        default="./.cache",
+        help="The directory in which the data shall be stored. Creates directories if necessary.",
+    )
+    parser.add_argument(
         "--version",
         action="version",
         version="%(prog)s {version}".format(version=__version__),
@@ -97,6 +132,13 @@ def main():
 
     # read passed CLI arguments
     args = parser.parse_args()
+
+    # pass additional arguments onto services
+    SERVICES["topic-statistics"].additional_args = {
+        "username": args.username,
+        "password": args.password,
+        "data-dir": args.data_dir,
+    }
 
     # add all of the defined services
     generate_sub_services(app, SERVICES.values())

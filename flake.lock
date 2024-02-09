@@ -26,6 +26,33 @@
         "type": "github"
       }
     },
+    "data-utils": {
+      "inputs": {
+        "flake-utils": [
+          "topic-statistics",
+          "flake-utils"
+        ],
+        "nix-filter": "nix-filter_7",
+        "nixpkgs": [
+          "topic-statistics",
+          "nixpkgs"
+        ],
+        "nlprep": "nlprep_2"
+      },
+      "locked": {
+        "lastModified": 1707474626,
+        "narHash": "sha256-D43V6cui4R7NgP1vhtt1mOdQnnjPcFu2wqmYFT7+SjI=",
+        "owner": "openeduhub",
+        "repo": "data-utils",
+        "rev": "d6a8eb25257d287ef1d6e8cb9fa51f87d0919654",
+        "type": "github"
+      },
+      "original": {
+        "owner": "openeduhub",
+        "repo": "data-utils",
+        "type": "github"
+      }
+    },
     "flake-utils": {
       "inputs": {
         "systems": "systems"
@@ -80,6 +107,24 @@
         "type": "github"
       }
     },
+    "flake-utils_4": {
+      "inputs": {
+        "systems": "systems_4"
+      },
+      "locked": {
+        "lastModified": 1705309234,
+        "narHash": "sha256-uNRRNRKmJyCRC/8y1RqBkqWBLM034y4qN7EprSdmgyA=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "1ef2e671c3b0c19053962c07dbda38332dcebf26",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
     "its-jointprobability": {
       "inputs": {
         "flake-utils": [
@@ -113,6 +158,21 @@
         "owner": "numtide",
         "repo": "nix-filter",
         "rev": "c843418ecfd0344ecb85844b082ff5675e02c443",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "nix-filter",
+        "type": "github"
+      }
+    },
+    "nix-filter_10": {
+      "locked": {
+        "lastModified": 1705332318,
+        "narHash": "sha256-kcw1yFeJe9N4PjQji9ZeX47jg0p9A0DuU4djKvg1a7I=",
+        "owner": "numtide",
+        "repo": "nix-filter",
+        "rev": "3449dc925982ad46246cfc36469baf66e1b64f17",
         "type": "github"
       },
       "original": {
@@ -211,6 +271,36 @@
         "type": "github"
       }
     },
+    "nix-filter_8": {
+      "locked": {
+        "lastModified": 1705332318,
+        "narHash": "sha256-kcw1yFeJe9N4PjQji9ZeX47jg0p9A0DuU4djKvg1a7I=",
+        "owner": "numtide",
+        "repo": "nix-filter",
+        "rev": "3449dc925982ad46246cfc36469baf66e1b64f17",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "nix-filter",
+        "type": "github"
+      }
+    },
+    "nix-filter_9": {
+      "locked": {
+        "lastModified": 1705332318,
+        "narHash": "sha256-kcw1yFeJe9N4PjQji9ZeX47jg0p9A0DuU4djKvg1a7I=",
+        "owner": "numtide",
+        "repo": "nix-filter",
+        "rev": "3449dc925982ad46246cfc36469baf66e1b64f17",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "nix-filter",
+        "type": "github"
+      }
+    },
     "nix2container": {
       "inputs": {
         "flake-utils": "flake-utils_3",
@@ -279,6 +369,22 @@
     },
     "nixpkgs_4": {
       "locked": {
+        "lastModified": 1707268954,
+        "narHash": "sha256-2en1kvde3cJVc3ZnTy8QeD2oKcseLFjYPLKhIGDanQ0=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "f8e2ebd66d097614d51a56a755450d4ae1632df1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_5": {
+      "locked": {
         "lastModified": 1691006197,
         "narHash": "sha256-DbtxVWPt+ZP5W0Usg7jAyTomIM//c3Jtfa59Ht7AV8s=",
         "owner": "nixos",
@@ -293,7 +399,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_5": {
+    "nixpkgs_6": {
       "locked": {
         "lastModified": 1707091808,
         "narHash": "sha256-LahKBAfGbY836gtpVNnWwBTIzN7yf/uYM/S0g393r0Y=",
@@ -324,6 +430,30 @@
         "owner": "openeduhub",
         "repo": "nlprep",
         "rev": "cf16a16f5ff9e8942ed88c559fd23567b6e0c21c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "openeduhub",
+        "repo": "nlprep",
+        "type": "github"
+      }
+    },
+    "nlprep_2": {
+      "inputs": {
+        "flake-utils": "flake-utils_4",
+        "nix-filter": "nix-filter_8",
+        "nixpkgs": [
+          "topic-statistics",
+          "data-utils",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1706709548,
+        "narHash": "sha256-Kcnxhezw5joPPpm2LSjWEf1AjcMYfE8xBidkz+LmsC4=",
+        "owner": "openeduhub",
+        "repo": "nlprep",
+        "rev": "2c3d0bb4c0b01897c9c709a8ee40bb5f000ad7df",
         "type": "github"
       },
       "original": {
@@ -430,6 +560,7 @@
         "openapi-checks": "openapi-checks",
         "text-extraction": "text-extraction",
         "text-statistics": "text-statistics",
+        "topic-statistics": "topic-statistics",
         "wlo-classification": "wlo-classification",
         "wlo-topic-assistant": "wlo-topic-assistant"
       }
@@ -465,6 +596,21 @@
       }
     },
     "systems_3": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
+    "systems_4": {
       "locked": {
         "lastModified": 1681028828,
         "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
@@ -534,12 +680,35 @@
         "type": "github"
       }
     },
+    "topic-statistics": {
+      "inputs": {
+        "data-utils": "data-utils",
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nix-filter": "nix-filter_9",
+        "nixpkgs": "nixpkgs_4"
+      },
+      "locked": {
+        "lastModified": 1707484363,
+        "narHash": "sha256-ZV6qpvlPJMKlNqHm8WICzyWzG4cYZfFBoKtWMG8UltY=",
+        "owner": "openeduhub",
+        "repo": "topic-statistics",
+        "rev": "54aca54d4674f6269717e1f5f0c84a734e06b6a8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "openeduhub",
+        "repo": "topic-statistics",
+        "type": "github"
+      }
+    },
     "wlo-classification": {
       "inputs": {
         "flake-utils": [
           "flake-utils"
         ],
-        "nixpkgs": "nixpkgs_4",
+        "nixpkgs": "nixpkgs_5",
         "nltk-data": "nltk-data_2",
         "openapi-checks": [
           "openapi-checks"
@@ -565,8 +734,8 @@
         "flake-utils": [
           "flake-utils"
         ],
-        "nix-filter": "nix-filter_7",
-        "nixpkgs": "nixpkgs_5",
+        "nix-filter": "nix-filter_10",
+        "nixpkgs": "nixpkgs_6",
         "nltk-data": "nltk-data_3",
         "oeh-metadata-vocabs": "oeh-metadata-vocabs",
         "openapi-checks": [

@@ -62,6 +62,12 @@
         openapi-checks.follows = "openapi-checks";
       };
     };
+    topic-statistics = {
+      url = "github:openeduhub/topic-statistics";
+      inputs = {
+        flake-utils.follows = "flake-utils";
+      };
+    };
   };
 
   outputs = { self, nixpkgs, flake-utils, ... }:
@@ -73,6 +79,7 @@
             # add overlays of the sub-services
             overlays = [
               self.inputs.text-statistics.overlays.default
+              self.inputs.topic-statistics.overlays.default
               self.inputs.text-extraction.overlays.default
               self.inputs.wlo-topic-assistant.overlays.default
               self.inputs.wlo-classification.overlays.default
@@ -105,7 +112,7 @@
           ### declare how the python application shall be built
           python-kidra = python.pkgs.buildPythonApplication rec {
             pname = "python-kidra";
-            version = "1.2.1";
+            version = "1.2.2";
             src = nix-filter {
               root = self;
               include = [ "src" ./setup.py ./requirements.txt ];
@@ -123,6 +130,7 @@
               "--suffix PATH : ${
               pkgs.lib.makeBinPath [
                 pkgs.text-statistics
+                pkgs.topic-statistics
                 pkgs.text-extraction
                 pkgs.wlo-topic-assistant
                 pkgs.wlo-classification
@@ -140,18 +148,20 @@
               Cmd = [ "${python-kidra}/bin/python-kidra" ];
               ExposedPorts = { "8080/tcp" = { }; };
             };
-            layers = (map
-              ({ pkg, maxLayers }:
-                nix2container.buildLayer {
-                  deps = [ pkg ]; inherit maxLayers;
-                })
-              [
-                { pkg = pkgs.text-statistics; maxLayers = 5; }
-                { pkg = pkgs.text-extraction; maxLayers = 5; }
-                { pkg = pkgs.wlo-topic-assistant; maxLayers = 30; }
-                { pkg = pkgs.wlo-classification; maxLayers = 30; }
-                { pkg = pkgs.its-jointprobability; maxLayers = 30; }
-              ]);
+            layers =
+              (map
+                ({ pkg, maxLayers }:
+                  nix2container.buildLayer {
+                    deps = [ pkg ]; inherit maxLayers;
+                  })
+                [
+                  { pkg = pkgs.text-statistics; maxLayers = 5; }
+                  { pkg = pkgs.topic-statistics; maxLayers = 5; }
+                  { pkg = pkgs.text-extraction; maxLayers = 5; }
+                  { pkg = pkgs.wlo-topic-assistant; maxLayers = 30; }
+                  { pkg = pkgs.wlo-classification; maxLayers = 30; }
+                  { pkg = pkgs.its-jointprobability; maxLayers = 30; }
+                ]);
             maxLayers = 5;
           };
 
@@ -185,11 +195,12 @@
                 service-bin = "${python-kidra}/bin/python-kidra";
                 service-port = 8080;
                 openapi-domain = "/v3/api-docs";
-                memory-size = 6144;
+                memory-size = 8 * 1024;
                 skip-endpoints = [
-                  "/link-wikipedia"
-                  "/text-extraction"
-                  "/disciplines-new-update"
+                  "/link-wikipedia" # requires internet
+                  "/text-extraction" # requires internet
+                  "/update-data" # requires internet
+                  "/topic-statistics" # requires data
                 ];
               };
             });

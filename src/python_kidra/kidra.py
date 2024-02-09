@@ -1,7 +1,7 @@
 """The internal logic of the kidra web-service"""
 import time
 from collections.abc import Callable, Iterable, Iterator
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from subprocess import Popen
 from typing import Any, Optional, TypeVar
 
@@ -28,7 +28,7 @@ def _make_domain(host: str, subdomain: str, port: Optional[str] = None) -> str:
     )
 
 
-@dataclass(frozen=True)
+@dataclass
 class Service:
     """Contains all the necessary information about a service"""
 
@@ -45,6 +45,8 @@ class Service:
         float
     ] = 600  #: Time in seconds to wait for service to boot. Infinite if None
     autostart: bool = True  #: Whether to automatically start this service
+    #: additional arguments to be passed to the CLI when starting the service
+    additional_args: dict[str, str] = field(default_factory=dict)
 
     @property
     def post_address(self) -> str:
@@ -67,7 +69,8 @@ def start_subservice(service: Service) -> None:
 
     print(f"Starting {service.name} on port {service.port}...")
     Popen(
-        [service.binary, f"--port={service.port}"],
+        [service.binary, f"--port={service.port}"]
+        + [f"--{key}={value}" for key, value in service.additional_args.items()],
         stdin=None,
         stdout=None,
         stderr=None,
@@ -181,6 +184,13 @@ def custom_openapi(app, services: Iterable[Service]):
 
         def rename_leaves(path: dict):
             for keys, value in __dictionary_leaves(path):
+                if isinstance(value, list):
+                    for subvalue in value:
+                        if isinstance(subvalue, dict):
+                            rename_leaves(subvalue)
+
+                    continue
+
                 if type(value) is not str:
                     continue
 
