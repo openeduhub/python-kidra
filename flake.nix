@@ -30,6 +30,7 @@
         nixpkgs.follows = "nixpkgs";
         flake-utils.follows = "flake-utils";
         openapi-checks.follows = "openapi-checks";
+        nix-filter.follows = "nix-filter";
       };
     };
     wlo-topic-assistant = {
@@ -37,6 +38,7 @@
       inputs = {
         flake-utils.follows = "flake-utils";
         openapi-checks.follows = "openapi-checks";
+        nix-filter.follows = "nix-filter";
       };
     };
     wlo-classification = {
@@ -51,6 +53,7 @@
       inputs = {
         flake-utils.follows = "flake-utils";
         openapi-checks.follows = "openapi-checks";
+        nix-filter.follows = "nix-filter";
       };
     };
     its-jointprobability = {
@@ -58,12 +61,14 @@
       inputs = {
         flake-utils.follows = "flake-utils";
         openapi-checks.follows = "openapi-checks";
+        nix-filter.follows = "nix-filter";
       };
     };
     topic-statistics = {
       url = "github:openeduhub/topic-statistics";
       inputs = {
         flake-utils.follows = "flake-utils";
+        nix-filter.follows = "nix-filter";
       };
     };
   };
