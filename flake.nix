@@ -49,8 +49,6 @@
     text-extraction = {
       url = "github:openeduhub/text-extraction";
       inputs = {
-        # see comment above
-        nixpkgs.follows = "nixpkgs";
         flake-utils.follows = "flake-utils";
         openapi-checks.follows = "openapi-checks";
       };
@@ -87,7 +85,7 @@
             ];
           };
           # an alias for the python version we are using
-          python = pkgs.python310;
+          python = pkgs.python3;
 
           nix2container =
             self.inputs.nix2container.packages.${system}.nix2container;
@@ -112,7 +110,7 @@
           ### declare how the python application shall be built
           python-kidra = python.pkgs.buildPythonApplication rec {
             pname = "python-kidra";
-            version = "1.2.2";
+            version = "1.3.0";
             src = nix-filter {
               root = self;
               include = [ "src" ./setup.py ./requirements.txt ];
@@ -201,6 +199,7 @@
                   "/text-extraction" # requires internet
                   "/update-data" # requires internet
                   "/topic-statistics" # requires data
+                  "/bayesian-predictions" # makes ram explode; tested upstream
                 ];
               };
             });

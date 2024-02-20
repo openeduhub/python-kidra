@@ -63,6 +63,8 @@ nix run "git+https://scm.edu-sharing.com/edu-sharing/projects/wlo/python-kidra"
 The following services are currently available from the ~Kidra~:
 - [[https://github.com/openeduhub/text-extraction][text-extraction]]: Extract text from URLs
 - [[https://github.com/openeduhub/text-statistics][text-statistics]]: Calculate various metrics on text, e.g. reading time or readability
+- [[https://github.com/openeduhub/topic-statistics][topic-statistics]]: Calculate various statistics for WLO topic pages
+- [[https://github.com/openeduhub/its-jointprobability][its-jointprobability]]: Bayesian model that predicts multiple metadata fields, such as school discipline or educational context
 - [[https://github.com/yovisto/wlo-topic-assistant][wlo-topic-assistant]]: Find [[https://vocabs.openeduhub.de/w3id.org/openeduhub/vocabs/oeh-topics/5e40e372-735c-4b17-bbf7-e827a5702b57.html][WLO topics]] in texts
 - [[https://github.com/yovisto/wlo-classification][wlo-classification]]: Predict [[https://vocabs.openeduhub.de/w3id.org/openeduhub/vocabs/discipline/index.html][disciplines]] relevant for texts
 - [[https://github.com/yovisto/kea-el][kea]]: Link relevant Wikipedia articles found in texts

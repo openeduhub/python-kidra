@@ -61,11 +61,11 @@ SERVICES: dict[str, Service] = {
         post_subdomain="from-url",
     ),
     "its-jointprobability": Service(
-        name="disciplines-new",
+        name="bayesian-predictions",
         binary="its-jointprobability",
         host="localhost",
         port=next(ports),
-        post_subdomain="predict_disciplines",
+        post_subdomain="predict",
         autostart=True,
     ),
     "disciplines": Service(
