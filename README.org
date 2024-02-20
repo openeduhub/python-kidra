@@ -69,6 +69,12 @@ The following services are currently available from the ~Kidra~:
 - [[https://github.com/yovisto/wlo-classification][wlo-classification]]: Predict [[https://vocabs.openeduhub.de/w3id.org/openeduhub/vocabs/discipline/index.html][disciplines]] relevant for texts
 - [[https://github.com/yovisto/kea-el][kea]]: Link relevant Wikipedia articles found in texts
 
+* Requirements
+
+The service requires around 8 GB of RAM to start up.
+
+Depending on the usage of the Bayesian prediction model, this requirement may be higher -- specifically, the RAM usage of predictions is directly proportional to the =num_samples= parameter. At =num_samples = =1000=, around 2 GB of additional RAM are required to process the request.
+
 * API
 
 Each individual service available through this API is located on another subdomain.
