@@ -338,11 +338,11 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1708407374,
-        "narHash": "sha256-EECzarm+uqnNDCwaGg/ppXCO11qibZ1iigORShkkDf0=",
+        "lastModified": 1707907779,
+        "narHash": "sha256-dtktfFJn+36yBkZ1mnQGdiDsqnzC9pXt/Ecpsui0hiY=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "f33dd27a47ebdf11dc8a5eb05e7c8fbdaf89e73f",
+        "rev": "c5e9528855e4e6feda2b16dec28de880ce774b93",
         "type": "github"
       },
       "original": {
@@ -386,11 +386,11 @@
     },
     "nixpkgs_7": {
       "locked": {
-        "lastModified": 1707091808,
-        "narHash": "sha256-LahKBAfGbY836gtpVNnWwBTIzN7yf/uYM/S0g393r0Y=",
+        "lastModified": 1708294118,
+        "narHash": "sha256-evZzmLW7qoHXf76VCepvun1esZDxHfVRFUJtumD7L2M=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "9f2ee8c91ac42da3ae6c6a1d21555f283458247e",
+        "rev": "e0da498ad77ac8909a980f07eff060862417ccf7",
         "type": "github"
       },
       "original": {
@@ -655,11 +655,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1701851815,
-        "narHash": "sha256-cuBwzSNFeFpz1+zy3jFee9O9G505YxsUXCPL49j+YGQ=",
+        "lastModified": 1708510559,
+        "narHash": "sha256-PHCmRYfiHllGUR4icQ9NXScCTtGZk61PghzF414+ScA=",
         "owner": "openeduhub",
         "repo": "text-statistics",
-        "rev": "10175f88cf379877be98fe7d8e13ff3a2aaefc96",
+        "rev": "e3d36c7ebcef4edb1be0f9c13374a20cab23b8cc",
         "type": "github"
       },
       "original": {
@@ -680,11 +680,11 @@
         "nixpkgs": "nixpkgs_5"
       },
       "locked": {
-        "lastModified": 1707484363,
-        "narHash": "sha256-ZV6qpvlPJMKlNqHm8WICzyWzG4cYZfFBoKtWMG8UltY=",
+        "lastModified": 1708521040,
+        "narHash": "sha256-5i6oQEre7JgvW2cDukDUgipQ7vvhF72jIHtHpkFuf+A=",
         "owner": "openeduhub",
         "repo": "topic-statistics",
-        "rev": "54aca54d4674f6269717e1f5f0c84a734e06b6a8",
+        "rev": "49efb4536384eb9366438859c41934be71bce33d",
         "type": "github"
       },
       "original": {
@@ -735,11 +735,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1707318193,
-        "narHash": "sha256-/4NclcBPrcuI+1eBxEKcjSk/4IA3D627lV2JP6xuJFY=",
+        "lastModified": 1708511082,
+        "narHash": "sha256-KQHfJMRgUCFwVu+maHBL1cbWRXmjPc2YShxq323CKSA=",
         "owner": "joopitz",
         "repo": "wlo-topic-assistant",
-        "rev": "362ede8b34087229bfca9684a3671f2671dc8709",
+        "rev": "6df5d024adc040da4fc0c2bd2c430fb65da00564",
         "type": "github"
       },
       "original": {
