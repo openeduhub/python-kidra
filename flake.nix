@@ -59,6 +59,7 @@
     its-jointprobability = {
       url = "github:openeduhub/its-jointprobability";
       inputs = {
+        nixpkgs.follows = "nixpkgs";
         flake-utils.follows = "flake-utils";
         openapi-checks.follows = "openapi-checks";
         nix-filter.follows = "nix-filter";
