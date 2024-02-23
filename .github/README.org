@@ -9,6 +9,18 @@ A unified API to the various AI applications we have built as part of the IT's J
 echo $result | json
 #+end_src
 
+* Running as a native application
+
+This service can also be run and installed as a native ~Nix~ ~Flake~ application. In particular, the following command will run the service locally:
+#+begin_src sh
+nix run github:openeduhub/python-kidra
+#+end_src
+
+If the command above gives an error complaining about unknown experimental features, try this instead:
+#+begin_src sh
+nix --extra-experimental-features "nix-command flakes" run github:openeduhub/python-kidra
+#+end_src
+
 * Build & run OCI image
 
 An OCI-compliant image can be built in one of two ways:
@@ -51,21 +63,16 @@ Now, start the service through
 docker run -p 8080:8080 python-kidra:<version>
 #+end_src
 
-* Running as a native application
-
-This service can also be run and installed as a native ~Nix~ ~Flake~ application. In particular, the following command will run the service locally:
-#+begin_src sh
-nix run github:openeduhub/python-kidra
-#+end_src
-
 * Implemented Services
 
 The following services are currently available from the ~Kidra~:
 - [[https://github.com/openeduhub/text-extraction][text-extraction]]: Extract text from URLs
-- [[https://github.com/openeduhub/text-statistics][text-statistics]]: Calculate various metrics on text, e.g. reading time or readability
-- [[https://github.com/yovisto/wlo-topic-assistant][wlo-topic-assistant]]: Find [[https://vocabs.openeduhub.de/w3id.org/openeduhub/vocabs/oeh-topics/5e40e372-735c-4b17-bbf7-e827a5702b57.html][WLO topics]] in texts
-- [[https://github.com/yovisto/wlo-classification][wlo-classification]]: Predict [[https://vocabs.openeduhub.de/w3id.org/openeduhub/vocabs/discipline/index.html][disciplines]] relevant for texts
-- [[https://github.com/yovisto/kea-el][kea]]: Link relevant Wikipedia articles found in texts
+- [[https://github.com/openeduhub/text-statistics][text-statistics]]: Calculate various metrics on text, e.g. reading time, readability, or word embeddings.
+- [[https://github.com/openeduhub/topic-statistics][topic-statistics]]: Calculate various metrics on WLO topic pages.
+- [[https://github.com/openeduhub/its-jointprobability][its-jointprobability]]: A general model for predicting multiple metadata, including school discipline and educational context.
+- [[https://github.com/yovisto/wlo-topic-assistant][wlo-topic-assistant]]: Find [[https://vocabs.openeduhub.de/w3id.org/openeduhub/vocabs/oeh-topics/5e40e372-735c-4b17-bbf7-e827a5702b57.html][WLO topics]] in texts.
+- [[https://github.com/yovisto/wlo-classification][wlo-classification]]: Predict [[https://vocabs.openeduhub.de/w3id.org/openeduhub/vocabs/discipline/index.html][disciplines]] relevant for texts.
+- [[https://github.com/yovisto/kea-el][kea]]: Link relevant Wikipedia articles found in texts.
 
 * API
 
