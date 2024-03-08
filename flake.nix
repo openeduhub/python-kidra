@@ -161,14 +161,11 @@
                     deps = [ pkg ]; inherit maxLayers;
                   })
                 [
-                  { pkg = pkgs.text-statistics; maxLayers = 5; }
-                  { pkg = pkgs.topic-statistics; maxLayers = 5; }
-                  { pkg = pkgs.text-extraction; maxLayers = 5; }
-                  { pkg = pkgs.wlo-topic-assistant; maxLayers = 30; }
-                  { pkg = pkgs.wlo-classification; maxLayers = 30; }
-                  { pkg = pkgs.its-jointprobability; maxLayers = 30; }
+                  { pkg = pkgs.wlo-topic-assistant; maxLayers = 50; }
+                  { pkg = pkgs.wlo-classification; maxLayers = 50; }
+                  { pkg = pkgs.its-jointprobability; maxLayers = 20; }
                 ]);
-            maxLayers = 5;
+            maxLayers = 20;
           };
 
         in
