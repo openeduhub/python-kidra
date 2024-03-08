@@ -2,7 +2,7 @@
   description = "Dependency and Build Process for the python-kidra";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     # utilities
     flake-utils.url = "github:numtide/flake-utils";
     nix-filter.url = "github:numtide/nix-filter";
@@ -51,6 +51,7 @@
     text-extraction = {
       url = "github:openeduhub/text-extraction";
       inputs = {
+        nixpkgs.follows = "nixpkgs";
         flake-utils.follows = "flake-utils";
         openapi-checks.follows = "openapi-checks";
         nix-filter.follows = "nix-filter";
@@ -68,6 +69,7 @@
     topic-statistics = {
       url = "github:openeduhub/topic-statistics";
       inputs = {
+        nixpkgs.follows = "nixpkgs";
         flake-utils.follows = "flake-utils";
         nix-filter.follows = "nix-filter";
       };
