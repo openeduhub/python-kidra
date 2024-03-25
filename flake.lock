@@ -191,11 +191,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1710765109,
-        "narHash": "sha256-wAqQrbl+O8rOguwBK3o/7E1qO3OKT1mmFBfSwd0s8Bc=",
+        "lastModified": 1711372559,
+        "narHash": "sha256-FOLhAWXHV8U2kp69oL4CyqQnce8Ie9S03ETgunYInwQ=",
         "owner": "openeduhub",
         "repo": "its-jointprobability",
-        "rev": "fd17d59c745884791fb5fc557545896d9b6a9c1c",
+        "rev": "21a10634faad52d8bfdb593ff135c2d9455ce768",
         "type": "github"
       },
       "original": {
@@ -221,11 +221,11 @@
       },
       "locked": {
         "host": "gitlab.gwdg.de",
-        "lastModified": 1710759129,
-        "narHash": "sha256-YotkxkXrYnT3h/Q4Cyk4VEPECEoBkaZII+pa7mEk42s=",
+        "lastModified": 1711367804,
+        "narHash": "sha256-8yuXOlttZoGT9UUbB0woOVZjjPY2+aSWS429AOVHgLQ=",
         "owner": "jopitz",
         "repo": "its-jointprobability-model",
-        "rev": "a57484df4a1702a05f520fa0684e0ebc29271475",
+        "rev": "d67d9a69460f7ea90bc1046c42290dff13f43816",
         "type": "gitlab"
       },
       "original": {
