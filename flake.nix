@@ -2,6 +2,7 @@
   description = "Dependency and Build Process for the python-kidra";
 
   inputs = {
+    # change this to nixos-24.05, once it has been released
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     # utilities
     flake-utils.url = "github:numtide/flake-utils";
