@@ -2,7 +2,7 @@
   description = "Dependency and Build Process for the python-kidra";
 
   inputs = {
-    # change this to nixos-24.05, once it has been released
+    # TODO: change this to nixos-24.05, once it has been released (~2024-06-01)
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     # utilities
     flake-utils.url = "github:numtide/flake-utils";
@@ -12,7 +12,6 @@
       url = "github:openeduhub/nix-openapi-checks";
       inputs = {
         nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "flake-utils";
       };
     };
     # sub-services
@@ -29,50 +28,33 @@
            run within the kidra.
         */
         nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "flake-utils";
-        openapi-checks.follows = "openapi-checks";
-        nix-filter.follows = "nix-filter";
       };
     };
     wlo-topic-assistant = {
       url = "github:joopitz/wlo-topic-assistant/plainNix";
       inputs = {
-        flake-utils.follows = "flake-utils";
-        openapi-checks.follows = "openapi-checks";
-        nix-filter.follows = "nix-filter";
+        nixpkgs.follows = "nixpkgs";
       };
     };
     wlo-classification = {
       url = "github:joopitz/wlo-classification/nix";
-      inputs = {
-        flake-utils.follows = "flake-utils";
-        openapi-checks.follows = "openapi-checks";
-      };
     };
     text-extraction = {
       url = "github:openeduhub/text-extraction";
       inputs = {
         nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "flake-utils";
-        openapi-checks.follows = "openapi-checks";
-        nix-filter.follows = "nix-filter";
       };
     };
     its-jointprobability = {
       url = "github:openeduhub/its-jointprobability";
       inputs = {
         nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "flake-utils";
-        openapi-checks.follows = "openapi-checks";
-        nix-filter.follows = "nix-filter";
       };
     };
     topic-statistics = {
       url = "github:openeduhub/topic-statistics";
       inputs = {
         nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "flake-utils";
-        nix-filter.follows = "nix-filter";
       };
     };
   };
