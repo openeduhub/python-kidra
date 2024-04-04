@@ -137,6 +137,16 @@
               Cmd = [ "${python-kidra}/bin/python-kidra" ];
               ExposedPorts = { "8080/tcp" = { }; };
             };
+            # create an empty /tmp directory for playwright
+            copyToRoot = pkgs.buildEnv {
+              name = "tmp";
+              pathsToLink = [ "/tmp" ];
+              paths = [
+                (pkgs.runCommand "mk-tmp" { } ''
+                    mkdir -p $out/tmp
+                  '')
+              ];
+            };
             layers =
               (map
                 ({ pkg, maxLayers }:

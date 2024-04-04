@@ -1,16 +1,16 @@
 """The internal logic of the kidra web-service"""
+
 import time
 from collections.abc import Callable, Iterable, Iterator
 from dataclasses import dataclass, field
 from subprocess import Popen
 from typing import Any, Optional, TypeVar
 
-from fastapi import HTTPException
+import requests
+from fastapi import Response
+from fastapi.openapi.utils import get_openapi
 
 from python_kidra._version import __version__
-
-import requests
-from fastapi.openapi.utils import get_openapi
 
 
 def _make_domain(host: str, subdomain: str, port: Optional[str] = None) -> str:
@@ -41,9 +41,9 @@ class Service:
     openapi_schema: str = (
         "openapi.json"  #: Sub-domain for getting the api of the service
     )
-    boot_timeout: Optional[
-        float
-    ] = 600  #: Time in seconds to wait for service to boot. Infinite if None
+    boot_timeout: Optional[float] = (
+        600  #: Time in seconds to wait for service to boot. Infinite if None
+    )
     autostart: bool = True  #: Whether to automatically start this service
     #: additional arguments to be passed to the CLI when starting the service
     additional_args: dict[str, str] = field(default_factory=dict)
@@ -102,18 +102,16 @@ def start_subservice(service: Service) -> None:
     print("DONE")
 
 
-def get_post_request_fun(service: Service) -> Callable[[dict], dict]:
+def get_post_request_fun(service: Service) -> Callable[[dict], Response]:
     """Create a POST request function from the given service"""
 
-    def fun(data: dict) -> dict:
-        response = requests.post(service.post_address, json=data)
-
-        if not response.ok:
-            raise HTTPException(
-                status_code=response.status_code, detail=response.json()["detail"]
+    def fun(data: dict) -> Response:
+        with requests.post(service.post_address, json=data) as response:
+            return Response(
+                content=response.content,
+                status_code=response.status_code,
+                headers=response.headers,
             )
-
-        return response.json()
 
     return fun
 
