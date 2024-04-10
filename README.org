@@ -947,4 +947,4 @@ When a service shall be started as part of the ~Kidra~ (i.e. it is not an extern
 
 1. If the service has already been packaged in [[https://github.com/NixOS/nixpkgs][nixpkgs]], no further work is necessary here. Otherwise, we recommend packaging the service as a Flake and providing it as an input in [[file:.//flake.nix][flake.nix]] (see the other sub-services, such as =text-statistics=).
    
-2. Make the binaries of the service available to the ~Kidra~ in =makeWrapperArgs= of the build specification of =python-kidra=. For this, it should suffice to simply include the application's package in the list provided to =pkgs.lib.makeBinPath=.
+2. Make the binaries of the service available to the ~Kidra~ in =makeWrapperArgs= of the build specification of =python-kidra= ([[file:package.nix]]). Additionally, add an overlay that provides the package in [[file:flake.nix]].
