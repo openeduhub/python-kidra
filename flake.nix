@@ -39,6 +39,9 @@
     };
     wlo-classification = {
       url = "github:joopitz/wlo-classification/nix";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+      };
     };
     text-extraction = {
       url = "github:openeduhub/text-extraction";
@@ -68,19 +71,26 @@
       ...
     }:
     let
-      additionalInputs = with self.inputs; [
-        its-jointprobability
-        text-extraction
-        text-statistics
-        topic-statistics
-        wlo-classification
-        wlo-topic-assistant
-      ];
-      additionalOverlays = map (inp: inp.overlays.default) additionalInputs;
+      # create an attribute set from the inputs, mapping each input name to its
+      # default package.
+      # we pass this onto the package build, in order to "inject" these
+      # package's to the build / runtime environment
+      additionalPackages =
+        system:
+        builtins.mapAttrs (name: value: value.packages.${system}.default) ({
+          inherit (self.inputs)
+            its-jointprobability
+            text-extraction
+            text-statistics
+            topic-statistics
+            wlo-classification
+            wlo-topic-assistant
+            ;
+        });
     in
     {
       overlays = import ./overlays.nix {
-        inherit additionalOverlays;
+        inherit additionalPackages;
         inherit (nixpkgs) lib;
         nix-filter = self.inputs.nix-filter.lib;
       };
