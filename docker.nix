@@ -1,4 +1,5 @@
 {
+  lib,
   nix2container,
   python-kidra,
   buildEnv,
@@ -7,6 +8,24 @@
   wlo-classification,
   its-jointprobability,
 }:
+let
+  # this function takes a list of image layers and nests them, such that all
+  # previous layers are dependencies of later layers. this avoids duplicate
+  # dependencies
+  # from https://blog.eigenvalue.net/2023-nix2container-everything-once/
+  foldImageLayers =
+    let
+      mergeToLayer =
+        priorLayers: component:
+        assert builtins.isList priorLayers;
+        assert builtins.isAttrs component;
+        let
+          layer = nix2container.buildLayer (component // { layers = priorLayers; });
+        in
+        priorLayers ++ [ layer ];
+    in
+    layers: lib.foldl mergeToLayer [ ] layers;
+in
 nix2container.buildImage {
   name = python-kidra.pname;
   tag = python-kidra.version;
@@ -33,29 +52,29 @@ nix2container.buildImage {
 
   # separate out some of the larger dependencies into their own layers, so that
   # we don't need to push / pull them every time
-  layers = (
-    map
-      (
-        { pkg, maxLayers }:
-        nix2container.buildLayer {
-          deps = [ pkg ];
-          inherit maxLayers;
-        }
-      )
-      [
+  layers =
+    let
+      layerDefinitions = [
         {
-          pkg = wlo-topic-assistant;
-          maxLayers = 40;
+          deps = [ wlo-classification ];
+          # while we could probably increase the number of automatically
+          # generated layers a bit, due to inherent redundancy between the
+          # manually defined layers, choosing these such that the total number
+          # of layers is less than 100 is always going to be safe (whereas
+          # choosing something larger may cause issues)
+          maxLayers = 25;
         }
         {
-          pkg = wlo-classification;
-          maxLayers = 30;
+          deps = [ its-jointprobability ];
+          maxLayers = 25;
         }
         {
-          pkg = its-jointprobability;
-          maxLayers = 20;
+          deps = [ wlo-topic-assistant ];
+          maxLayers = 25;
         }
-      ]
-  );
-  maxLayers = 5;
+      ];
+    in
+    # de-duplicate the manually defined layers
+    foldImageLayers layerDefinitions;
+  maxLayers = 25;
 }
