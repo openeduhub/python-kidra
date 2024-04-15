@@ -24,6 +24,11 @@ or
 nix run "git+https://scm.edu-sharing.com/edu-sharing/projects/wlo/python-kidra#docker.copyToPodman"
 #+end_src
 
+Note that the default image contains some headless web browsers by default. A more minimal image (around 1.2 GB smaller), which does not contain these, can be created using
+#+begin_src sh
+nix run "git+https://scm.edu-sharing.com/edu-sharing/projects/wlo/python-kidra#docker-without-browsers.copyToPodman"
+#+end_src
+
 ** Build using Docker
 
 The image can also be built without a local nix installation through bootstrapping. For this, another docker image, containing a nix installation with flakes support, will be used.

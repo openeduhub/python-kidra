@@ -109,9 +109,11 @@
             rec {
               inherit (pkgs) python-kidra;
               default = python-kidra;
+              python-kidra-without-browsers = python-kidra.override { includeBrowsers = false; };
               docker = pkgs.callPackage ./docker.nix {
                 nix2container = self.inputs.nix2container.packages.${system}.nix2container;
               };
+              docker-without-browsers = docker.override { python-kidra = python-kidra-without-browsers; };
             }
           );
 
