@@ -18,16 +18,13 @@
     text-statistics = {
       url = "github:openeduhub/text-statistics";
       inputs = {
-        /*
-          override inputs to follow ours.
-          while this causes the resulting package / image to be much smaller,
-          this setting is risky and may cause breaks later, as we are now
-          controlling the package versions of this sub-service here,
-          rather than in the service itself.
-          as a result, updates to the package versions in the service
-          will not actually affect anything for the service
-          run within the kidra.
-        */
+        # override inputs to follow ours.
+        # while this causes the resulting package / image to be much smaller,
+        # this setting is risky and may cause breaks later, as we are now
+        # controlling the package versions of this sub-service here, rather
+        # than in the service itself. as a result, updates to the package
+        # versions in the service will not actually affect anything for the
+        # service run within the kidra.
         nixpkgs.follows = "nixpkgs";
       };
     };
@@ -40,7 +37,9 @@
     wlo-classification = {
       url = "github:joopitz/wlo-classification/nix";
       inputs = {
-        nixpkgs.follows = "nixpkgs";
+        # this service does not currently run on the unstable branch of
+        # nixpkgs, due to changes in `keras`. thus, do not override its nixpkgs
+        # version here
       };
     };
     text-extraction = {
