@@ -73,6 +73,8 @@ We provide two additional versions of the application -- one with CUDA support a
   #+end_src
 
   Do note that the size of the resulting application will be significantly larger (almost twice as large) and that ~wlo-classification~ (i.e. the =/disciplines= endpoint of the API) will not be built with CUDA support regardless.
+
+  Additionally, building the application with CUDA support may take a considerable amount of time, especially when the additional caches specified in this project are not used.
   
 - Similarly, the more minimal builds can be accessed with the =without-browsers=-suffix. These save a bit more than 1 GB of space.
   #+begin_src sh
