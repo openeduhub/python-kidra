@@ -15,12 +15,34 @@
       };
     };
     # sub-services
-    text-statistics.url = "github:openeduhub/text-statistics";
-    wlo-topic-assistant.url = "github:joopitz/wlo-topic-assistant/plainNix";
-    wlo-classification.url = "github:joopitz/wlo-classification/nix";
-    text-extraction.url = "github:openeduhub/text-extraction";
-    its-jointprobability.url = "github:openeduhub/its-jointprobability";
-    topic-statistics.url = "github:openeduhub/topic-statistics";
+    text-statistics = {
+      url = "github:openeduhub/text-statistics";
+      # see comment on the overlays for potential consequences of making the
+      # nixpkgs version of this service follow the kidra's. this is useful to
+      # do in addition to using the overlays because this way, additional
+      # dependencies such as `its-data` or `its-prep`, will also be built using
+      # the same nixpkgs version
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    wlo-topic-assistant = {
+      url = "github:joopitz/wlo-topic-assistant/plainNix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    wlo-classification = {
+      url = "github:joopitz/wlo-classification/nix";
+    };
+    text-extraction = {
+      url = "github:openeduhub/text-extraction";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    its-jointprobability = {
+      url = "github:openeduhub/its-jointprobability";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    topic-statistics = {
+      url = "github:openeduhub/topic-statistics";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
