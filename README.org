@@ -1,5 +1,6 @@
 #+title: A Unified API for IT's JOINTLY AI Services in Python
 #+EXPORT_EXCLUDE_TAGS: noexport
+#+OPTIONS: toc:2
 
 A unified API to the various AI applications we have built as part of the IT's JOINTLY project in order to generate additional or missing metadata.
  
