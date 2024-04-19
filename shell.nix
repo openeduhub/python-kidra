@@ -5,7 +5,8 @@
   pyright,
   nix-tree,
   swagger-cli,
-  dive
+  dive,
+  nix-output-monitor,
 }:
 mkShell {
   packages = [
@@ -25,5 +26,6 @@ mkShell {
     nix-tree
     swagger-cli
     dive
+    nix-output-monitor
   ];
 }
