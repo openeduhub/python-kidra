@@ -469,11 +469,11 @@
         "openapi-checks": "openapi-checks"
       },
       "locked": {
-        "lastModified": 1713426745,
-        "narHash": "sha256-o4BSgD4v6+bX4mghpkV7wtN2EpiP9vOhfsU+uamWMO0=",
+        "lastModified": 1713510864,
+        "narHash": "sha256-P2O6W0YPfQ/ZcwWWzG75zWjIZXS2dYJkXTb1MPljoMM=",
         "owner": "openeduhub",
         "repo": "its-jointprobability",
-        "rev": "0a297f6b2c29973bce28db69f4e6966bde90ca17",
+        "rev": "c060f9ec9bc1b825bfa844e776f5682d35ef36a9",
         "type": "github"
       },
       "original": {
@@ -881,11 +881,11 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1713284584,
-        "narHash": "sha256-rRuPBJD9+yjz7tY3xC/BvFUwloutynR9piiVE6fhGqo=",
+        "lastModified": 1713442664,
+        "narHash": "sha256-LoExypse3c/uun/39u4bPTN4wejIF7hNsdITZO41qTw=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "2b6ee326ad047870526d9a3ae88dfd0197da898d",
+        "rev": "d764f230634fa4f86dc8d01c6af9619c7cc5d225",
         "type": "github"
       },
       "original": {
