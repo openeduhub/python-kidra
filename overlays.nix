@@ -1,13 +1,13 @@
 {
   lib,
   nix-filter,
-  additionalPackages ? (system: { }),
+  additionalOverlays ? ([ ]),
 }:
 rec {
   default = python-kidra;
 
   # add the additional packages
-  fix-nixpkgs = (final: prev: (additionalPackages final.system));
+  fix-nixpkgs = lib.composeManyExtensions additionalOverlays;
 
   # add the python-kidra itself, which includes in its runtime PATH a reference
   # to each package given by the additional inputs.

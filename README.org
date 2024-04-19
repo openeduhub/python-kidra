@@ -17,16 +17,11 @@ An OCI-compliant image can be built in one of two ways:
 
 Ensure that nix is installed with flakes support. Then, the image can be copied directly to the ~Docker~ or ~podman~ daemon through
 #+begin_src sh
-nix run "git+https://scm.edu-sharing.com/edu-sharing/projects/wlo/python-kidra#docker.copyToDockerDaemon"
+nix run "github:openeduhub/python-kidra#docker.copyToDockerDaemon"
 #+end_src
 or
 #+begin_src sh
-nix run "git+https://scm.edu-sharing.com/edu-sharing/projects/wlo/python-kidra#docker.copyToPodman"
-#+end_src
-
-Note that the default image contains some headless web browsers by default. A more minimal image (around 1.2 GB smaller), which does not contain these, can be created using
-#+begin_src sh
-nix run "git+https://scm.edu-sharing.com/edu-sharing/projects/wlo/python-kidra#docker-without-browsers.copyToPodman"
+nix run "github:openeduhub/python-kidra#docker.copyToPodman"
 #+end_src
 
 ** Build using Docker
@@ -34,7 +29,7 @@ nix run "git+https://scm.edu-sharing.com/edu-sharing/projects/wlo/python-kidra#d
 The image can also be built without a local nix installation through bootstrapping. For this, another docker image, containing a nix installation with flakes support, will be used.
 Make sure to be inside of repository before running =build.sh=; it will not work otherwise.
 #+begin_src sh
-git clone https://scm.edu-sharing.com/edu-sharing/projects/wlo/python-kidra
+git clone https://github.com/openeduhub/python-kidra.git
 cd python-kidra
 sh build.sh
 #+end_src
@@ -60,8 +55,32 @@ docker run -p 8080:8080 python-kidra:<version>
 
 This service can also be run and installed as a native ~Nix~ ~Flake~ application. In particular, the following command will run the service locally:
 #+begin_src sh
-nix run "git+https://scm.edu-sharing.com/edu-sharing/projects/wlo/python-kidra"
+nix run "github:openeduhub/python-kidra"
 #+end_src
+
+* Additional Options (CUDA Support or More Minimal Application)
+
+We provide two additional versions of the application -- one with CUDA support and one with fewer dependencies (i.e. no bundled web browsers). Note that the latter will disable some features.
+
+- CUDA support can be accessed through the ~Nix Flake~ endpoints with the =with-cuda=-suffix, like =docker-with-cuda=, =python-kidra-with-cuda=, or simply =with-cuda=:
+  #+begin_src sh
+  # enter development environment with CUDA
+  nix develop "github:openeduhub/python-kidra#with-cuda"
+  # run webservice with CUDA
+  nix run "github:openeduhub/python-kidra#with-cuda"
+  # build docker image with CUDA
+  nix run "github:openeduhub/python-kidra#docker-with-cuda.copyToDockerDaemon"
+  #+end_src
+
+  Do note that the size of the resulting application will be significantly larger (almost twice as large) and that ~wlo-classification~ (i.e. the =/disciplines= endpoint of the API) will not be built with CUDA support regardless.
+  
+- Similarly, the more minimal builds can be accessed with the =without-browsers=-suffix. These save a bit more than 1 GB of space.
+  #+begin_src sh
+  # run more minimal webservice
+  nix run "github:openeduhub/python-kidra#without-browsers"
+  # build more minimal docker image
+  nix run "github:openeduhub/python-kidra#docker-without-browsers.copyToPodman"
+  #+end_src
 
 * Implemented Services
 
