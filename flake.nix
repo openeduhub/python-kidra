@@ -33,7 +33,6 @@
     };
     text-extraction = {
       url = "github:openeduhub/text-extraction";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
     its-jointprobability = {
       url = "github:openeduhub/its-jointprobability";
