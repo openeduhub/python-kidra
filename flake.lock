@@ -469,17 +469,17 @@
         "openapi-checks": "openapi-checks"
       },
       "locked": {
-        "lastModified": 1713510864,
-        "narHash": "sha256-P2O6W0YPfQ/ZcwWWzG75zWjIZXS2dYJkXTb1MPljoMM=",
-        "owner": "openeduhub",
-        "repo": "its-jointprobability",
-        "rev": "c060f9ec9bc1b825bfa844e776f5682d35ef36a9",
-        "type": "github"
+        "lastModified": 1795119157,
+        "narHash": "sha256-HFYVouo5SgIfsDjzxeQEFY53VIml1pnR4J43nNtE5Rg=",
+        "ref": "refs/heads/main",
+        "rev": "0341912f4fa8ac361edcf44c7cd4703c654f7c9e",
+        "revCount": 202,
+        "type": "git",
+        "url": "https://scm.edu-sharing.com/edu-sharing/projects/wlo/metaservices/its-jointprobability.git"
       },
       "original": {
-        "owner": "openeduhub",
-        "repo": "its-jointprobability",
-        "type": "github"
+        "type": "git",
+        "url": "https://scm.edu-sharing.com/edu-sharing/projects/wlo/metaservices/its-jointprobability.git"
       }
     },
     "its-prep": {
@@ -506,7 +506,7 @@
       "inputs": {
         "flake-utils": "flake-utils_8",
         "nix-filter": "nix-filter_8",
-        "nixpkgs": "nixpkgs_5"
+        "nixpkgs": "nixpkgs_6"
       },
       "locked": {
         "lastModified": 1711448222,
@@ -526,7 +526,7 @@
       "inputs": {
         "flake-utils": "flake-utils_11",
         "nix-filter": "nix-filter_11",
-        "nixpkgs": "nixpkgs_7"
+        "nixpkgs": "nixpkgs_8"
       },
       "locked": {
         "lastModified": 1713271404,
@@ -558,17 +558,17 @@
         ]
       },
       "locked": {
-        "host": "gitlab.gwdg.de",
+        "host": "scm.edu-sharing.com",
         "lastModified": 1713425184,
         "narHash": "sha256-lYDeamOmPlPrvO5aoixyFpjoiAwKQC/aDYl0PE91llU=",
-        "owner": "jopitz",
+        "owner": "edu-sharing%2Fprojects%2Fwlo%2Fmetaservices",
         "repo": "its-jointprobability-model",
         "rev": "139c672d0afded37283f607d09aea8ab23760206",
         "type": "gitlab"
       },
       "original": {
-        "host": "gitlab.gwdg.de",
-        "owner": "jopitz",
+        "host": "scm.edu-sharing.com",
+        "owner": "edu-sharing%2Fprojects%2Fwlo%2Fmetaservices",
         "repo": "its-jointprobability-model",
         "type": "gitlab"
       }
@@ -897,6 +897,22 @@
     },
     "nixpkgs_5": {
       "locked": {
+        "lastModified": 1794890597,
+        "narHash": "sha256-lME2lHoDHAaSHP3/okgiVoJ0icVEvsQH8LeU3We7tcc=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "04906337b6d53e8bb0eaf0470ae9f070a4d4eb55",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_6": {
+      "locked": {
         "lastModified": 1709780214,
         "narHash": "sha256-p4iDKdveHMhfGAlpxmkCtfQO3WRzmlD11aIcThwPqhk=",
         "owner": "nixos",
@@ -911,7 +927,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_6": {
+    "nixpkgs_7": {
       "locked": {
         "lastModified": 1701539137,
         "narHash": "sha256-nVO/5QYpf1GwjvtpXhyxx5M3U/WN0MwBro4Lsk+9mL0=",
@@ -927,7 +943,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_7": {
+    "nixpkgs_8": {
       "locked": {
         "lastModified": 1709780214,
         "narHash": "sha256-p4iDKdveHMhfGAlpxmkCtfQO3WRzmlD11aIcThwPqhk=",
@@ -943,7 +959,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_8": {
+    "nixpkgs_9": {
       "locked": {
         "lastModified": 1712741485,
         "narHash": "sha256-bCs0+MSTra80oXAsnM6Oq62WsirOIaijQ/BbUY59tR4=",
@@ -1050,7 +1066,7 @@
       "inputs": {
         "auto-openapi-tests": "auto-openapi-tests_4",
         "flake-utils": "flake-utils_9",
-        "nixpkgs": "nixpkgs_6"
+        "nixpkgs": "nixpkgs_7"
       },
       "locked": {
         "lastModified": 1701952387,
@@ -1332,9 +1348,7 @@
       "inputs": {
         "flake-utils": "flake-utils_6",
         "nix-filter": "nix-filter_6",
-        "nixpkgs": [
-          "nixpkgs"
-        ],
+        "nixpkgs": "nixpkgs_5",
         "openapi-checks": "openapi-checks_3"
       },
       "locked": {
@@ -1401,7 +1415,7 @@
     "wlo-classification": {
       "inputs": {
         "flake-utils": "flake-utils_12",
-        "nixpkgs": "nixpkgs_8",
+        "nixpkgs": "nixpkgs_9",
         "openapi-checks": "openapi-checks_5"
       },
       "locked": {

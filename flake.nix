@@ -35,7 +35,7 @@
       url = "github:openeduhub/text-extraction";
     };
     its-jointprobability = {
-      url = "github:openeduhub/its-jointprobability";
+      url = "git+https://scm.edu-sharing.com/edu-sharing/projects/wlo/metaservices/its-jointprobability.git";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     topic-statistics = {

@@ -2,6 +2,19 @@ Build and push Docker image:
   stage: build
   image:
     name: "nixos/nix:2.20.5"
+  before_script:
+    # some flake inputs (its-jointprobability and its model) are private
+    # repositories on scm.edu-sharing.com. SCM_READ_TOKEN is a masked CI/CD
+    # variable holding an access token with scope read_api and at least the
+    # Reporter role on these projects.
+    # - gitlab: inputs (model) are fetched through the GitLab API
+    - echo "access-tokens = scm.edu-sharing.com=PAT:${SCM_READ_TOKEN}" >> /etc/nix/nix.conf
+    # - git+https: inputs (its-jointprobability) are fetched through git
+    - git config --global url."https://oauth2:${SCM_READ_TOKEN}@scm.edu-sharing.com/".insteadOf "https://scm.edu-sharing.com/"
   script: nix --extra-experimental-features "nix-command flakes" run ".#docker.copyTo" -- --dest-creds=$DOCKER_USERNAME:$DOCKER_PASSWORD docker://$DOCKER_REGISTRY/projects/wlo/python-kidra:$CI_COMMIT_REF_SLUG
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
+    # allow manually started pipelines ("Run pipeline" in the GitLab UI) on any
+    # branch, e.g. to test changes before merging; the image is tagged with
+    # the branch name
+    - if: '$CI_PIPELINE_SOURCE == "web"'
