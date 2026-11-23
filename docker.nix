@@ -37,9 +37,9 @@ nix2container.buildImage {
     };
   };
 
-  # create an empty /tmp directory for playwright (playwright assumes there to
-  # be a /tmp directory and will fail if it does not exist -- nix does not
-  # create one for the image by default)
+  # create an empty /tmp directory (many tools, e.g. python's tempfile, assume
+  # there to be a /tmp directory -- nix does not create one for the image by
+  # default)
   copyToRoot = buildEnv {
     name = "tmp";
     pathsToLink = [ "/tmp" ];

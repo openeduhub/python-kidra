@@ -31,9 +31,6 @@
     wlo-classification = {
       url = "github:joopitz/wlo-classification/nix";
     };
-    text-extraction = {
-      url = "github:openeduhub/text-extraction";
-    };
     its-jointprobability = {
       url = "git+https://scm.edu-sharing.com/edu-sharing/projects/wlo/metaservices/its-jointprobability.git";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -69,7 +66,6 @@
           with self.inputs;
           [
             its-jointprobability
-            text-extraction
             text-statistics
             topic-statistics
             wlo-topic-assistant
@@ -131,12 +127,9 @@
               # packages without CUDA
               inherit (pkgs-without-cuda) python-kidra;
               default = python-kidra;
-              python-kidra-without-browsers = python-kidra.override { includeBrowsers = false; };
-              without-browsers = python-kidra-without-browsers;
               docker = pkgs-without-cuda.callPackage ./docker.nix {
                 nix2container = self.inputs.nix2container.packages.${system}.nix2container;
               };
-              docker-without-browsers = docker.override { python-kidra = python-kidra-without-browsers; };
 
               # packages with CUDA
               python-kidra-with-cuda = pkgs-with-cuda.python-kidra;
@@ -168,7 +161,6 @@
                 memory-size = 8 * 1024;
                 skip-endpoints = [
                   "/link-wikipedia" # requires internet
-                  "/text-extraction" # requires internet
                   "/update-data" # requires internet
                   "/topic-statistics" # requires data
                   "/bayesian-predictions" # makes ram explode; tested upstream
