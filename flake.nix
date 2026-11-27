@@ -147,7 +147,6 @@
                 openapi-domain = "/v3/api-docs";
                 memory-size = 8 * 1024;
                 skip-endpoints = [
-                  "/link-wikipedia" # requires internet
                   "/update-data" # requires internet
                   "/topic-statistics" # requires data
                   "/bayesian-predictions" # makes ram explode; tested upstream
