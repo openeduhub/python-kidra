@@ -53,13 +53,6 @@ SERVICES: dict[str, Service] = {
         post_subdomain="update-data",
         autostart=False,  # already started above
     ),
-    "text-extraction": Service(
-        name="text-extraction",
-        binary="text-extraction",
-        host="localhost",
-        port=next(ports),
-        post_subdomain="from-url",
-    ),
     "its-jointprobability": Service(
         name="bayesian-predictions",
         binary="its-jointprobability",

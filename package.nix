@@ -7,16 +7,14 @@
   uvicorn,
   requests,
   its-jointprobability,
-  text-extraction,
   text-statistics,
   topic-statistics,
   wlo-classification,
   wlo-topic-assistant,
-  includeBrowsers ? true,
 }:
 buildPythonApplication {
   pname = "python-kidra";
-  version = "1.3.0";
+  version = "2.0.0";
 
   src = nix-filter {
     root = ./.;
@@ -46,11 +44,6 @@ buildPythonApplication {
     "--suffix PATH : ${
       lib.makeBinPath [
         its-jointprobability
-        # optionally include browsers in text-extraction -- allowing this will
-        # let the text-extraction end-point create and use its own headless
-        # browser, without the need of being provided one. note that this
-        # increases the closure size by about 1 GB.
-        (text-extraction.override { inherit includeBrowsers; })
         text-statistics
         topic-statistics
         wlo-classification
