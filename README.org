@@ -84,7 +84,6 @@ The following services are currently available from the ~Kidra~:
 - [[https://github.com/openeduhub/topic-statistics][topic-statistics]]: Calculate various statistics for WLO topic pages
 - [[https://github.com/openeduhub/its-jointprobability][its-jointprobability]]: Bayesian model that predicts multiple metadata fields, such as school discipline or educational context
 - [[https://github.com/yovisto/wlo-topic-assistant][wlo-topic-assistant]]: Find [[https://vocabs.openeduhub.de/w3id.org/openeduhub/vocabs/oeh-topics/5e40e372-735c-4b17-bbf7-e827a5702b57.html][WLO topics]] in texts
-- [[https://github.com/yovisto/kea-el][kea]]: Link relevant Wikipedia articles found in texts /(requests are simply forwarded to an external service)/
 
 * Requirements
 
@@ -780,101 +779,6 @@ curl -d \
     }
   },
   "version": "0.1.2"
-}
-#+end_src
-
-** Wikipedia categories :noexport:
-
-Accessible through the =link-wikipedia/= sub-domain.
-
-Predict the and link Wikipedia entities in the given text. For more details, see [[https://github.com/yovisto/kea-el]].
-
-The processed JSON fields are
-- =text: str=
-  The text to be analyzed.
-
-If the analysis was successful, a JSON object with the following fields is returned:
-- =text: str=
-  A modified version of the given text with added hyperlinks to the Wikipedia pages
-- =entities: list[entity]= 
-  The Wikipedia articles that were linked to the text. An entity contains the following fields:
-  - =entity: str= :: The name of the entity
-  - =start: int= :: The number of the start character in the text at which this entity was found
-  - =end: int= :: The number of the end character in the text at which this entity was found
-  - =score: float= :: The confidence of the link
-  - =categories: str= :: The Wikipedia categories of this entity
-- =version: str=
-  The version of the sub-service
-
-*** Examples
-
-#+begin_src sh :results verbatim :exports both :post format-json(result=*this*) :wrap src json
-curl -d \
-     '{"text" : "Der Satz des Pythagoras lautet: a^2 + b^2 = c^2."}' \
-     -H "Content-Type: application/json" \
-     -X POST \
-     http://0.0.0.0:8080/link-wikipedia
-#+end_src
-#+RESULTS:
-#+begin_src json
-{
-  "text": "Der <a href='https://de.wikipedia.org/wiki/Satz_des_Pythagoras'>Satz des Pythagoras</a> lautet: <a href='https://de.wikipedia.org/wiki/Aftokinitodromos_2'>a^2</a> + b^2 = c^2.",
-  "entities": [
-    {
-      "entity": "Satz_des_Pythagoras",
-      "start": 4,
-      "end": 23,
-      "score": 0.4880952380952381,
-      "categories": [
-        "Kategorie:Dreiecksgeometrie",
-        "Kategorie:Ebene_Geometrie",
-        "Kategorie:Trigonometrie",
-        "Kategorie:Satz_(Ebene_Geometrie)",
-        "Kategorie:Ebene_Geometrie",
-        "Kategorie:Satz_(Geometrie)"
-      ]
-    },
-    {
-      "entity": "Aftokinitodromos_2",
-      "start": 32,
-      "end": 35,
-      "score": 0.49563953488372087,
-      "categories": [
-        "Kategorie:Abkürzung",
-        "Kategorie:!Hauptkategorie",
-        "Kategorie:Autobahn_in_Griechenland",
-        "Kategorie:Autobahn",
-        "Kategorie:Fernstraße_in_Griechenland",
-        "Kategorie:Straße_in_Griechenland",
-        "Kategorie:Europastraße_90",
-        "Kategorie:Europastraße_nach_Nummer",
-        "Kategorie:Straße_in_Europa",
-        "Kategorie:Straße_in_Afrika",
-        "Kategorie:Straße_in_Asien",
-        "Kategorie:Straße_in_Australien_und_Ozeanien",
-        "Kategorie:Straße_in_Nordamerika",
-        "Kategorie:Straße_in_Südamerika",
-        "Kategorie:Straße_nach_Kontinent",
-        "Kategorie:Straße_nach_Staat",
-        "Kategorie:Verkehrsbauwerk_in_Europa",
-        "Kategorie:Verkehr_(Ostmakedonien_und_Thrakien)",
-        "Kategorie:Ostmakedonien_und_Thrakien",
-        "Kategorie:Sport_(Griechenland)_nach_Region",
-        "Kategorie:Verkehr_(Griechenland)_nach_Region",
-        "Kategorie:Verkehr_(Region_Epirus)",
-        "Kategorie:Epirus_(griechische_Region)",
-        "Kategorie:Verkehr_(Griechenland)_nach_Region",
-        "Kategorie:Verkehr_(Westmakedonien)",
-        "Kategorie:Verkehr_(Griechenland)_nach_Region",
-        "Kategorie:Westmakedonien",
-        "Kategorie:Verkehr_(Zentralmakedonien)",
-        "Kategorie:Verkehr_(Griechenland)_nach_Region",
-        "Kategorie:Zentralmakedonien"
-      ]
-    }
-  ],
-  "essentialCategories": [],
-  "version": "0.1.0"
 }
 #+end_src
 
