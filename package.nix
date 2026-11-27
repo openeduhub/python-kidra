@@ -9,7 +9,6 @@
   its-jointprobability,
   text-statistics,
   topic-statistics,
-  wlo-classification,
   wlo-topic-assistant,
 }:
 buildPythonApplication {
@@ -46,7 +45,6 @@ buildPythonApplication {
         its-jointprobability
         text-statistics
         topic-statistics
-        wlo-classification
         wlo-topic-assistant
       ]
     }"

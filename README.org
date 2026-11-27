@@ -73,7 +73,7 @@ We provide an additional version of the application with CUDA support.
   nix run "github:openeduhub/python-kidra#docker-with-cuda.copyToDockerDaemon"
   #+end_src
 
-  Do note that the size of the resulting application will be significantly larger (almost twice as large) and that ~wlo-classification~ (i.e. the =/disciplines= endpoint of the API) will not be built with CUDA support regardless.
+  Do note that the size of the resulting application will be significantly larger (almost twice as large).
 
   Additionally, building the application with CUDA support may take a considerable amount of time, especially when the additional caches specified in this project are not used.
 
@@ -84,7 +84,6 @@ The following services are currently available from the ~Kidra~:
 - [[https://github.com/openeduhub/topic-statistics][topic-statistics]]: Calculate various statistics for WLO topic pages
 - [[https://github.com/openeduhub/its-jointprobability][its-jointprobability]]: Bayesian model that predicts multiple metadata fields, such as school discipline or educational context
 - [[https://github.com/yovisto/wlo-topic-assistant][wlo-topic-assistant]]: Find [[https://vocabs.openeduhub.de/w3id.org/openeduhub/vocabs/oeh-topics/5e40e372-735c-4b17-bbf7-e827a5702b57.html][WLO topics]] in texts
-- [[https://github.com/yovisto/wlo-classification][wlo-classification]]: Predict [[https://vocabs.openeduhub.de/w3id.org/openeduhub/vocabs/discipline/index.html][disciplines]] relevant for texts
 - [[https://github.com/yovisto/kea-el][kea]]: Link relevant Wikipedia articles found in texts /(requests are simply forwarded to an external service)/
 
 * Requirements
@@ -186,44 +185,6 @@ curl -d '{"text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed 
   "reading_time": 29.43450094776071,
   "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
   "version": "1.0.4"
-}
-#+end_src
-
-** Disciplines prediction :noexport:
-
-Accessible through the =disciplines= sub-domain.
-
-Predict the discipline that relates to the given text, following the [[https://vocabs.openeduhub.de/w3id.org/openeduhub/vocabs/discipline/index.html][SkoHub vocabulary]]. For more information, see [[https://github.com/yovisto/wlo-classification]].
-
-The processed JSON fields are
-- =text: str=
-  The text to be analyzed.
-
-If the analysis was successful, a JSON object with the following fields is returned:
-- =disciplines: list[tuple[str, float]]=
-  A list of disciplines, represented as their ID according to the [[https://vocabs.openeduhub.de/w3id.org/openeduhub/vocabs/discipline/index.html][SkoHub vocabulary]], together with the confidence of the prediction.
-- =version: str= 
-  The version of the sub-service
-
-*** Examples
-
-#+begin_src sh :results verbatim :exports both :post format-json(result=*this*) :wrap src json
-curl -d \
-     '{"text" : "Der Satz des Pythagoras lautet: a^2 + b^2 = c^2."}' \
-     -H "Content-Type: application/json" \
-     -X POST \
-     http://0.0.0.0:8080/disciplines
-#+end_src
-#+RESULTS:
-#+begin_src json
-{
-  "disciplines": [
-    [
-      "380",
-      0.9223824143409729
-    ]
-  ],
-  "version": "0.1.0"
 }
 #+end_src
 

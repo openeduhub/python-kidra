@@ -28,9 +28,6 @@
       url = "github:joopitz/wlo-topic-assistant/plainNix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    wlo-classification = {
-      url = "github:joopitz/wlo-classification/nix";
-    };
     its-jointprobability = {
       url = "git+https://scm.edu-sharing.com/edu-sharing/projects/wlo/metaservices/its-jointprobability.git";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -60,9 +57,15 @@
       # to breaking changes in some dependencies. as a result, adding the
       # services this way may cause some breakage and trial-and-error. the way
       # of providing them below is always going to be safe.
+      # if a service does not provide an overlay, we can still proceed by
+      # manually defining an overlay that adds its package, e.g.
+      #   (final: prev: { foo = self.inputs.foo.packages.${final.system}.default; })
+      # however, packages added this way will not respect the configuration
+      # options we define here (e.g. CUDA support), nor will they share
+      # dependencies with the other services.
       additionalOverlays =
         # save being overly verbose by mapping over the input names
-        (map (inp: inp.overlays.default) (
+        map (inp: inp.overlays.default) (
           with self.inputs;
           [
             its-jointprobability
@@ -70,25 +73,7 @@
             topic-statistics
             wlo-topic-assistant
           ]
-        ))
-        ++
-        # if a service does not provide an overlay, we can still proceed by
-        # manually defining an overlay that adds said package here.
-        # however, the packages that were added this way will not respect the
-        # configuration options we define here. for instance, they may always /
-        # never be built with CUDA support.
-        # adding them this way may also be necessary if a service requires
-        # specific versions of its dependencies, since the versions enforced by
-        # the flake.lock of the service are not respected when using overlays
-        # (see comment above).
-        [
-          # this service does not work on the current version of nixpkgs, due
-          # to an issue in `keras`, which causes a runtime dependency to not be
-          # found
-          (final: prev: {
-            wlo-classification = self.inputs.wlo-classification.packages.${final.system}.default;
-          })
-        ];
+        );
     in
     {
       # provide the overlays defined in overlays.nix
@@ -120,8 +105,9 @@
         packages =
           { }
           // (nixpkgs.lib.optionalAttrs
-            # wlo-classification, a dependency of this application, only runs
-            # on linux
+            # only provided on linux (originally required by the since removed
+            # wlo-classification; darwin support of the remaining services is
+            # untested)
             (!pkgs-without-cuda.stdenv.isDarwin)
             rec {
               # packages without CUDA
@@ -149,8 +135,9 @@
         checks =
           { }
           // (nixpkgs.lib.optionalAttrs
-            # wlo-classification, a dependency of this application, only runs
-            # on linux
+            # only provided on linux (originally required by the since removed
+            # wlo-classification; darwin support of the remaining services is
+            # untested)
             (!pkgs-without-cuda.stdenv.isDarwin)
             {
               # run an automatic integration test through `nix flake check`

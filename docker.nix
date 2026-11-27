@@ -5,7 +5,6 @@
   buildEnv,
   runCommand,
   wlo-topic-assistant,
-  wlo-classification,
   its-jointprobability,
 }:
 let
@@ -56,16 +55,12 @@ nix2container.buildImage {
     let
       layerDefinitions = [
         {
-          deps = [ wlo-classification ];
+          deps = [ its-jointprobability ];
           # while we could probably increase the number of automatically
           # generated layers a bit, due to inherent redundancy between the
           # manually defined layers, choosing these such that the total number
           # of layers is less than 100 is always going to be safe (whereas
           # choosing something larger may cause issues)
-          maxLayers = 25;
-        }
-        {
-          deps = [ its-jointprobability ];
           maxLayers = 25;
         }
         {

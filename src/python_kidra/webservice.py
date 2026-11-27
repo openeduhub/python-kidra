@@ -61,13 +61,6 @@ SERVICES: dict[str, Service] = {
         post_subdomain="predict",
         autostart=True,
     ),
-    "disciplines": Service(
-        name="disciplines",
-        binary="wlo-classification",
-        host="localhost",
-        port=next(ports),
-        post_subdomain="predict_subjects",
-    ),
     "topic-assistant-keywords": Service(
         name="topic-assistant-keywords",
         binary="wlo-topic-assistant",
